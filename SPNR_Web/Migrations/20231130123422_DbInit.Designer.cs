@@ -12,7 +12,7 @@ using SPNR_Web.DataAccess;
 namespace SPNR_Web.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20231130122033_DbInit")]
+    [Migration("20231130123422_DbInit")]
     partial class DbInit
     {
         /// <inheritdoc />

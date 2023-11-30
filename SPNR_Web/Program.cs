@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using SPNR_Web.DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDBContext>(options => 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
 
 var app = builder.Build();
 
@@ -22,6 +27,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Events}/{action=Index}/{id?}");
 
 app.Run();

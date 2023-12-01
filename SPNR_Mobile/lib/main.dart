@@ -1,5 +1,9 @@
+// this is the main file that is responsible for the home page of the mobile app
+// as well as fetching all of the events from the json provided
+
 import 'dart:async';
 import 'dart:convert';
+import 'event.dart' as event_file;
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/foundation.dart';
@@ -73,10 +77,16 @@ class HomePage extends StatelessWidget { // Home Page widget
       body: Column(
         children: [
           Container(
+            height: 40,
             padding: EdgeInsets.only(left: 15.0),
             color: Color.fromRGBO(33, 37, 41, 1),
             width: double.infinity,
             child: Text('Ближайшие мероприятия:', style: TextStyle(fontSize: 25 ,color: Colors.white)), // TODO: check if the scaling is off on ALL devices
+          ),
+          Divider(
+            thickness: 2.0,
+            color: Colors.grey, // TODO: change color
+            height: 0,
           ),
           Container(
             color: Color.fromRGBO(33, 37, 41, 1),
@@ -193,7 +203,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
         RotatedBox(
           quarterTurns: 1,
           child: Text(
-            parsedTime[0] + ':' + parsedTime[1],
+            '${parsedTime[0]}:${parsedTime[1]}',
             style: TextStyle(fontSize: 27, color: Colors.red),
           ),
         ),
@@ -205,7 +215,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
   Widget build(BuildContext context) { // all items in the event list are made here
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EventPage(event: event)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => event_file.EventPage(event: event)));
       },
       child: Container(
         child: Row(
@@ -235,14 +245,3 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
   }
 }
 
-class EventPage extends StatelessWidget {
-  const EventPage({super.key, required this.event});
-  final Event event;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(event.name)),
-    );
-  }
-}

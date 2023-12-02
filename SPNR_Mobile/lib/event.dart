@@ -2,7 +2,6 @@
 
 import 'main.dart';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EventPage extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
@@ -38,7 +37,7 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // diplays event information (event's card)
     return Scaffold(
       backgroundColor: Color.fromRGBO(45, 47, 49, 1),
       appBar: AppBar(

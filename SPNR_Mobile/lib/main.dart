@@ -5,7 +5,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'event.dart' as event_file;
 
-import 'package:english_words/english_words.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -57,14 +56,24 @@ class SPNRApp extends StatelessWidget { // class which point to the Home Page of
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(title: 'Главная страница'),
+      home: const MainPage(title: 'Главная страница'),
     );
   }
 }
 
-class HomePage extends StatelessWidget { // Home Page widget
-  const HomePage({Key? key, required this.title}) : super(key: key); // make it require the title as a key value
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key, required this.title});
+  final String title;
+
+  @override
+  State<MainPage> createState() => _MainPageState(title: title);
+}
+
+
+class _MainPageState extends State<MainPage> { // Home Page widget
+  _MainPageState({Key? key, required this.title}); // make it require the title as a key value
   final String title;                                                // this is so we can define what page this is
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +83,7 @@ class HomePage extends StatelessWidget { // Home Page widget
         backgroundColor: Color.fromRGBO(20, 22, 24, 1),
         title: Text(title, style: TextStyle(fontSize: 25, color: Colors.white))
       ),
-      body: Column(
+      body: ListView(
         children: [
           Container(
             height: 40,
@@ -111,8 +120,35 @@ class HomePage extends StatelessWidget { // Home Page widget
               ),
             ),
           ),
+          // FIXME: this is where the calendar is supposed to go
         ],
       ),
+    bottomNavigationBar: BottomNavigationBar(
+      onTap: (int index) {
+        setState(() {
+          currentPage = index;
+        });
+      },
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Color.fromRGBO(20, 22, 24, 1),
+      selectedItemColor: Colors.white,
+      currentIndex: 0,
+      items: [
+        BottomNavigationBarItem( // home page
+          icon: Icon(Icons.home_outlined),
+          label: 'Главная',
+        ),
+        BottomNavigationBarItem( // 
+          icon: Icon(Icons.favorite),
+          label: 'Избранное',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.archive),
+          label: 'Архив',
+        ),
+      ],
+    ),
+    
     );
   }
 }
@@ -141,7 +177,6 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
   Row timestamptzToText(Event event) { // parsing the timestamptz data type from the database
     final parsedYearMonth = event.date.split('-');
-    final year = parsedYearMonth[0];
     var month = parsedYearMonth[1];
 
     final parsedDayTime = parsedYearMonth[2].split(' ');
@@ -217,29 +252,25 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => event_file.EventPage(event: event)));
       },
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            timestamptzToText(event),
-            Container(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Text(event.name, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold))
-                  ),
-                  Container(
-                    height: 60,
-                    width: 240,
-                    child: Text(event.description, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis, maxLines: 3)
-                  ),
-                ],
-              ),
+      child: Row(
+        children: <Widget>[
+          timestamptzToText(event), // time of the event
+          Container( // title of the event and short description
+            padding: EdgeInsets.only(left: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(event.name, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
+                SizedBox(
+                  height: 60,
+                  width: 240,
+                  child: Text(event.description, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis, maxLines: 3)
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

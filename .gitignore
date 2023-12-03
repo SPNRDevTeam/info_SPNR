@@ -477,4 +477,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # Web
-/SPNR_Web/appsetting.json
+/SPNR_Web/appsettings.json

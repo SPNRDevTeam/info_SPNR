@@ -3,16 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPNR_Web.Models.DataBase
 {
-    public class Header
+    public class Link
     {
         public Guid Id { get; set; }
-        [Required]
         public string Text { get; set; }
-        public string ImgPath { get; set; }
-        public List<Link> Links { get; set; }
+        public string Url { get; set; }
         [Required]
-        public Guid EventId { get; set; }
-        [ForeignKey("EventId")]
-        public Event Event { get; set; }
+        public Guid HeaderId { get; set; }
+        [ForeignKey("HeaderId")]
+        public Header Header { get; set; }
     }
 }

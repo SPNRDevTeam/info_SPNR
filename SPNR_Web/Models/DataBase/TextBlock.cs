@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPNR_Web.Models.DataBase
 {
@@ -6,6 +7,7 @@ namespace SPNR_Web.Models.DataBase
     {
         public Guid Id { get; set; }
         public string Header { get; set; }
+        [Required]
         public string MainText {  get; set; }
         public string Footer {  get; set; }
         public string ImgPath {  get; set; }

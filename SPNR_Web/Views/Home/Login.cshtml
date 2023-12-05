@@ -1,0 +1,14 @@
+﻿@model SPNR_Web.Models.DataBase.User
+@{
+    Layout = null;
+}
+<body>
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.TextBoxFor(m => m.Login, new { @class = "form-control", id = "UserName", placeholder = "Email address", required = "required", autofocus = "autofocus" })
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", type = "password", placeholder = "Password", required = "" })
+        <button type="submit">Sign in</button>
+    }
+</body>

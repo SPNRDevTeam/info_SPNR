@@ -1,20 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SPNR_Web.Models.DataBase;
 
 namespace SPNR_Web.DataAccess
 {
-    public class AppDBContext : IdentityDbContext
+    public class AppDBContext : DbContext
     {
-        DbSet<Event> Events { get; set; }
-        DbSet<Header> Headers { get; set; }
-        DbSet<SubEvent> SubEvents { get; set; }
-        DbSet<TextBlock> Blocks { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Header> Headers { get; set; }
+        public DbSet<SubEvent> SubEvents { get; set; }
+        public DbSet<TextBlock> Blocks { get; set; }
+        public DbSet<User> Users { get; set; }
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             modelBuilder.HasPostgresExtension("uuid-ossp");
         }
     }

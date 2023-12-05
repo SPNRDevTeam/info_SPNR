@@ -27,7 +27,7 @@ namespace SPNR_Web.Controllers
             return View();
         }
 
-        public IActionResult Login() 
+        public IActionResult Login()
         {
             return View();
         }
@@ -56,4 +56,5 @@ namespace SPNR_Web.Controllers
             }
             return View();
         }
+    }
 }

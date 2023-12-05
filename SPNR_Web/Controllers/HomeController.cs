@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using SPNR_Web.Models.DataBase;
+using SPNR_Web.Utils;
 
 namespace SPNR_Web.Controllers
 {
@@ -16,44 +17,13 @@ namespace SPNR_Web.Controllers
         {
             return View();
         }
-        [Authorize]
-        public IActionResult Add()
-        {
-            return View();
-        }
-
         public IActionResult News()
         {
             return View();
         }
-
-        public IActionResult Login()
+        [SessionAuthFilter]
+        public IActionResult Add() 
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Login(User u)
-        {
-            if (HttpContext.Session.GetString("UserName") == null)
-            {
-
-                if (ModelState.IsValid)
-                {
-                    if (true)
-                    {
-                        HttpContext.Session.SetString("UserName", "Deimos");
-                        return RedirectToAction("Index");
-                    }
-                }
-            }
-            else
-            {
-
-
-
-                return RedirectToAction("Login");
-            }
             return View();
         }
     }

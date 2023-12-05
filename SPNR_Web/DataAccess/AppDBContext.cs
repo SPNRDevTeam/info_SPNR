@@ -14,6 +14,7 @@ namespace SPNR_Web.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasIndex("Login");
             modelBuilder.HasPostgresExtension("uuid-ossp");
         }
     }

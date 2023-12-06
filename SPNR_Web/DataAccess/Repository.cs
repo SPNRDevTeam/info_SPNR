@@ -46,5 +46,13 @@ namespace SPNR_Web.DataAccess
         {
             _dbSet.Update(entity);
         }
+
+        public void Include(params string[] propNames)
+        {
+            foreach (var prop in propNames)
+            {
+                _dbSet.Include(prop);
+            }
+        }
     }
 }

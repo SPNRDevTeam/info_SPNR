@@ -3,7 +3,6 @@ using SPNR_Web.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using SPNR_Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

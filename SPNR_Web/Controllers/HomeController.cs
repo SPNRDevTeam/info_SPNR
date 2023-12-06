@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using SPNR_Web.Models.DataBase;
 using SPNR_Web.Utils;
+using SPNR_Web.DataAccess;
 
 namespace SPNR_Web.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        IUnitOfWork _unit;
+        public HomeController(IUnitOfWork unit)
         {
+            _unit = unit;
         }
 
         public IActionResult Index(int? id)

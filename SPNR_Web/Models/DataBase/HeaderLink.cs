@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SPNR_Web.Models.DataBase
 {
-    public class Link
+    public class HeaderLink
     {
         public Guid Id { get; set; }
         public string Text { get; set; }

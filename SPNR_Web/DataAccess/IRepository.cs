@@ -11,5 +11,6 @@ namespace SPNR_Web.DataAccess
         void Update(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
+        void Include(params string[] propNames);
     }
 }

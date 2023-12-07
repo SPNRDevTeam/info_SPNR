@@ -74,7 +74,7 @@ namespace SPNR_Web.Migrations
                     b.ToTable("Headers");
                 });
 
-            modelBuilder.Entity("SPNR_Web.Models.DataBase.Link", b =>
+            modelBuilder.Entity("SPNR_Web.Models.DataBase.HeaderLink", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,55 @@ namespace SPNR_Web.Migrations
 
                     b.HasIndex("HeaderId");
 
-                    b.ToTable("Link");
+                    b.ToTable("HeaderLinks");
+                });
+
+            modelBuilder.Entity("SPNR_Web.Models.DataBase.MediaLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MediaLinks");
+                });
+
+            modelBuilder.Entity("SPNR_Web.Models.DataBase.News", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PublicationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("SPNR_Web.Models.DataBase.SubEvent", b =>
@@ -142,16 +190,11 @@ namespace SPNR_Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<long>("DisplayOrder")
+                        .HasColumnType("bigint");
+
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Footer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("ImgPath")
                         .IsRequired()
@@ -163,7 +206,7 @@ namespace SPNR_Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId", "DisplayOrder");
 
                     b.ToTable("Blocks");
                 });
@@ -200,7 +243,7 @@ namespace SPNR_Web.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("SPNR_Web.Models.DataBase.Link", b =>
+            modelBuilder.Entity("SPNR_Web.Models.DataBase.HeaderLink", b =>
                 {
                     b.HasOne("SPNR_Web.Models.DataBase.Header", "Header")
                         .WithMany("Links")

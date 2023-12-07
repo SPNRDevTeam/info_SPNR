@@ -21,6 +21,7 @@ namespace SPNR_Web.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventName = table.Column<string>(type: "text", nullable: false),
                     EventDescription = table.Column<string>(type: "text", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ImgPath = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -29,13 +30,52 @@ namespace SPNR_Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MediaLinks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MediaLinks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "News",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    ImgUrl = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_News", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Login = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Blocks",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Header = table.Column<string>(type: "text", nullable: false),
+                    DisplayOrder = table.Column<long>(type: "bigint", nullable: false),
                     MainText = table.Column<string>(type: "text", nullable: false),
-                    Footer = table.Column<string>(type: "text", nullable: false),
                     ImgPath = table.Column<string>(type: "text", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -55,7 +95,7 @@ namespace SPNR_Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Place = table.Column<string>(type: "text", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
                     ImgPath = table.Column<string>(type: "text", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -77,6 +117,8 @@ namespace SPNR_Web.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventName = table.Column<string>(type: "text", nullable: false),
                     EventDescription = table.Column<string>(type: "text", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ImgPath = table.Column<string>(type: "text", nullable: false),
                     Place = table.Column<string>(type: "text", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -92,10 +134,35 @@ namespace SPNR_Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "HeaderLinks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    HeaderId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HeaderLinks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HeaderLinks_Headers_HeaderId",
+                        column: x => x.HeaderId,
+                        principalTable: "Headers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Blocks_EventId",
+                name: "IX_Blocks_EventId_DisplayOrder",
                 table: "Blocks",
-                column: "EventId");
+                columns: new[] { "EventId", "DisplayOrder" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HeaderLinks_HeaderId",
+                table: "HeaderLinks",
+                column: "HeaderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Headers_EventId",
@@ -107,6 +174,11 @@ namespace SPNR_Web.Migrations
                 name: "IX_SubEvents_EventId",
                 table: "SubEvents",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Login",
+                table: "Users",
+                column: "Login");
         }
 
         /// <inheritdoc />
@@ -116,10 +188,22 @@ namespace SPNR_Web.Migrations
                 name: "Blocks");
 
             migrationBuilder.DropTable(
-                name: "Headers");
+                name: "HeaderLinks");
+
+            migrationBuilder.DropTable(
+                name: "MediaLinks");
+
+            migrationBuilder.DropTable(
+                name: "News");
 
             migrationBuilder.DropTable(
                 name: "SubEvents");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Headers");
 
             migrationBuilder.DropTable(
                 name: "Events");

@@ -9,7 +9,7 @@ namespace SPNR_Web.Models.DataBase
         [Required]
         public string Text { get; set; }
         public string ImgPath { get; set; }
-        public List<Link> Links { get; set; }
+        public List<HeaderLink> Links { get; set; }
         [Required]
         public Guid EventId { get; set; }
         [ForeignKey("EventId")]

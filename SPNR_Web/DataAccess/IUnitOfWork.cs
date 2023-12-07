@@ -1,15 +1,18 @@
-﻿using SPNR_Web.Models.DataBase;
+﻿using Microsoft.EntityFrameworkCore;
+using SPNR_Web.Models.DataBase;
 
 namespace SPNR_Web.DataAccess
 {
     public interface IUnitOfWork
     {
-        IRepository<Event> EventRepo { get; }
-        IRepository<Header> HeaderRepo { get; }
-        IRepository<Link> LinkRepo { get; }
-        IRepository<SubEvent> SubEventRepo { get; }
-        IRepository<TextBlock> BlockRepo { get; }
-        IRepository<User> UserRepo { get; }
+        public IRepository<Event> EventRepo { get; }
+        public IRepository<Header> HeaderRepo { get; }
+        public IRepository<HeaderLink> HeaderLinkRepo { get; }
+        public IRepository<MediaLink> MediaLinkRepo { get; }
+        public IRepository<News> NewsRepo { get; }
+        public IRepository<SubEvent> SubEventRepo { get; }
+        public IRepository<TextBlock> BlockRepo { get; }
+        public IRepository<User> UserRepo { get; }
         void Save();
     }
 }

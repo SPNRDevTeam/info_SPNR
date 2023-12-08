@@ -1,13 +1,18 @@
 // this is the main file that is responsible for the home page of the mobile app
 // as well as fetching all of the events from the json provided
 
+// FIXME: IMPORTANT! add automatic sizing for apps 
+
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/rendering.dart';
+
 import 'event.dart' as event_file;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Future<List<Event>> fetchEvents(http.Client client) async { // fetches json and starts an isolated parsing of the events
   final response = await http.get(Uri.parse(
@@ -70,9 +75,9 @@ class MainPage extends StatefulWidget {
 }
 
 
-class _MainPageState extends State<MainPage> { // Home Page widget
+class _MainPageState extends State<MainPage> {     // Home Page widget
   _MainPageState({Key? key, required this.title}); // make it require the title as a key value
-  final String title;                                                // this is so we can define what page this is
+  final String title;                              // this is so we can define what page this is
   int currentPage = 0;
 
   @override
@@ -97,28 +102,22 @@ class _MainPageState extends State<MainPage> { // Home Page widget
             color: Colors.grey, // TODO: change color
             height: 0,
           ),
-          Container(
-            color: Color.fromRGBO(33, 37, 41, 1),
-            height: 400,
-            child: SingleChildScrollView( // this is to create a scroll box for the events
-              child: FutureBuilder<List<Event>>( // builds this widget in the future
-                future: fetchEvents(http.Client()),
-                builder: (context, snapshot) { // fetches snapshots
-                  if (snapshot.hasError) {
-                    print('line 83 snapshot failure');
-                    return const Center(
-                      child: Text('Ошибка', style: TextStyle(fontSize: 25, color: Colors.white)),
-                    );
-                  } else if (snapshot.hasData) {
-                    return EventsList(events: snapshot.data!); // calls the class to create a list of all of the events
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-            ),
+          FutureBuilder<List<Event>>( // builds this widget in the future
+            future: fetchEvents(http.Client()),
+            builder: (context, snapshot) { // fetches snapshots
+              if (snapshot.hasError) {
+                print('line 83 snapshot failure');
+                return const Center(
+                  child: Text('Ошибка', style: TextStyle(fontSize: 25, color: Colors.white)),
+                );
+              } else if (snapshot.hasData) {
+                return EventsList(events: snapshot.data!); // calls the class to create a list of all of the events
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
           // FIXME: this is where the calendar is supposed to go
         ],
@@ -132,19 +131,28 @@ class _MainPageState extends State<MainPage> { // Home Page widget
       type: BottomNavigationBarType.fixed,
       backgroundColor: Color.fromRGBO(20, 22, 24, 1),
       selectedItemColor: Colors.white,
-      currentIndex: 0,
+      unselectedItemColor: Colors.white,
+      currentIndex: currentPage,
       items: [
         BottomNavigationBarItem( // home page
           icon: Icon(Icons.home_outlined),
           label: 'Главная',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_month),
+          label: 'Календарь', 
         ),
         BottomNavigationBarItem( // 
           icon: Icon(Icons.favorite),
           label: 'Избранное',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.archive),
-          label: 'Архив',
+          icon: Icon(Icons.newspaper),
+          label: 'Новости',
+        ),
+        BottomNavigationBarItem(
+          icon: FaIcon(FontAwesomeIcons.bullhorn),
+          label: 'Контакты',
         ),
       ],
     ),
@@ -160,10 +168,10 @@ class EventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) { // creates the list of the events
     return ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
         separatorBuilder: (BuildContext context, int index) => const Divider(),
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
         itemCount: events.length,
+        shrinkWrap: true,
         itemBuilder: (context, int index) {
           print('displayed new event');
           return EventDescription(event: events[index]); // this is the item that goes into the list
@@ -178,37 +186,12 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
   Row timestamptzToText(Event event) { // parsing the timestamptz data type from the database
     final parsedYearMonth = event.date.split('-');
     var month = parsedYearMonth[1];
+    final months = ['ЯНВ', 'ФЕВ', 'МАР', 'АПР', 'МАЙ', 'ИЮН', 'ИЮЛ', 'АВГ', 'СЕН', 'ОКТ', 'НОЯ', 'ДЕК'];
+    month = months[int.parse(month) - 1];
 
     final parsedDayTime = parsedYearMonth[2].split(' ');
     final day = parsedDayTime[0];
     final time = parsedDayTime[1];
-
-    switch (month) {
-      case '01':
-        month = 'ЯНВ';
-      case '02':
-        month = 'ФЕВ';
-      case '03':
-        month = 'МАР';
-      case '04':
-        month = 'АПР';
-      case '05':
-        month = 'МАЙ';
-      case '06':
-        month = 'ИЮН';
-      case '07':
-        month = 'ИЮЛ';
-      case '08':
-        month = 'АВГ';
-      case '09':
-        month = 'СЕН';
-      case '10':
-        month = 'ОКТ';
-      case '11':
-        month = 'НОЯ';
-      case '12':
-        month = 'ДЕК';
-    }
 
     final parsedTime = time.split(':');
 
@@ -248,6 +231,9 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
   @override
   Widget build(BuildContext context) { // all items in the event list are made here
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => event_file.EventPage(event: event)));
@@ -261,11 +247,11 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event.name, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
+                Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
                 SizedBox(
                   height: 60,
-                  width: 240,
-                  child: Text(event.description, style: TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis, maxLines: 3)
+                  width: width * 0.75,
+                  child: Text(event.description, style: TextStyle(color: Colors.white, fontSize:  20), overflow: TextOverflow.ellipsis, maxLines: 2)
                 ),
               ],
             ),

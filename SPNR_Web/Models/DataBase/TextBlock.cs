@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SPNR_Web.Models.DataBase
 {
@@ -10,7 +11,9 @@ namespace SPNR_Web.Models.DataBase
         [Required]
         public string MainText {  get; set; }
         public string ImgPath {  get; set; }
+        [JsonIgnore]
         public Guid EventId { get; set; }
+        [JsonIgnore]
         [ForeignKey("EventId")]
         public Event Event { get; set; }
     }

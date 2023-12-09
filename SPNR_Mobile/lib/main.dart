@@ -4,6 +4,7 @@
 // FIXME: IMPORTANT! add automatic sizing for apps 
 
 import 'event.dart' as event;
+import 'calendar.dart' as calendar;
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,6 +36,7 @@ class _MainPageState extends State<MainPage> {     // App class
   int _currentPage = 0;
   static const List<Widget> _pages = [
     event.EventListBuilder(),
+    calendar.BuildCalendar(),
   ];
 
   @override

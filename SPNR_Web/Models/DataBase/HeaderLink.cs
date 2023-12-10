@@ -7,6 +7,7 @@ namespace SPNR_Web.Models.DataBase
     public class HeaderLink
     {
         [Key]
+        [JsonIgnore]
         public Guid Id { get; set; }
         public string Text { get; set; }
         public string Url { get; set; }
@@ -14,8 +15,8 @@ namespace SPNR_Web.Models.DataBase
         [Required]
         [JsonIgnore]
         public Guid HeaderId { get; set; }
-        [JsonIgnore]
         [ForeignKey("HeaderId")]
+        [JsonIgnore]
         public Header Header { get; set; }
     }
 }

@@ -6,11 +6,13 @@ namespace SPNR_Web.Models.DataBase
 {
     public class TextBlock
     {
+        [Key]
+        [JsonIgnore]
         public Guid Id { get; set; }
         public uint DisplayOrder { get; set; }
         [Required]
         public string MainText {  get; set; }
-        public string ImgPath {  get; set; }
+        public string? ImgPath {  get; set; }
         [JsonIgnore]
         public Guid EventId { get; set; }
         [JsonIgnore]

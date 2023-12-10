@@ -116,7 +116,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
                 Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
                 SizedBox(
                   height: 60,
-                  width: width * 0.75,
+                  width: width * 0.65,
                   child: Text(event.description, style: TextStyle(color: Colors.white, fontSize:  20), overflow: TextOverflow.ellipsis, maxLines: 2)
                 ),
               ],

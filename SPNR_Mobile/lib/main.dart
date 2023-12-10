@@ -3,8 +3,8 @@
 
 // FIXME: IMPORTANT! add automatic sizing for apps 
 
-import 'event.dart' as event;
-import 'calendar.dart' as calendar;
+import 'pages/event.dart' as event;
+import 'pages/calendar.dart' as calendar;
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,9 +34,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {     // App class
   _MainPageState({Key? key});
   int _currentPage = 0;
-  static const List<Widget> _pages = [
+  static List<Widget> _pages = [
     event.EventListBuilder(),
-    calendar.BuildCalendar(),
+    calendar.CalendarBuilder(),
   ];
 
   @override
@@ -59,6 +59,9 @@ class _MainPageState extends State<MainPage> {     // App class
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
         currentIndex: _currentPage,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        iconSize: 30,
         items: [
           BottomNavigationBarItem( // home page
             icon: Icon(Icons.home_outlined),

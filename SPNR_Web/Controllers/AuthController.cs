@@ -35,7 +35,7 @@ namespace SPNR_Web.Controllers
         public IActionResult Login(User user)
         {
             User dbUser = _unit.UserRepo.ReadFirst(u => u.Login == user.Login);
-            if (dbUser == null)
+            if (dbUser is null)
             {
                 ModelState.AddModelError("", "Login not registered");
             }

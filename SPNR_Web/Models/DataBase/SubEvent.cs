@@ -6,6 +6,8 @@ namespace SPNR_Web.Models.DataBase
 {
     public class SubEvent
     {
+        [Key]
+        [JsonIgnore]
         public Guid Id { get; set; }
         [Required]
         public string EventName { get; set; }
@@ -17,11 +19,11 @@ namespace SPNR_Web.Models.DataBase
         public DateTime End { get; set; }
         public string ImgPath { get; set; }
         public string Place { get; set; }
-        [JsonIgnore]
         [Required]
-        public Guid EventId { get; set; }
         [JsonIgnore]
+        public Guid EventId { get; set; }
         [ForeignKey("EventId")]
+        [JsonIgnore]
         public Event Event { get; set; }
     }
 }

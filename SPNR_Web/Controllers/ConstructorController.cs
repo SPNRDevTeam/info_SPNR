@@ -24,7 +24,7 @@ namespace SPNR_Web.Controllers
         [HttpPost]
         public IActionResult Event(Event @event)
         {
-            return Ok();
+            return ToHome();
         }
 
         [HttpPost]
@@ -69,6 +69,16 @@ namespace SPNR_Web.Controllers
             _unit.MediaLinkRepo.Remove(link);
             _unit.Save();
             return Ok();
+        }
+
+        [NonAction]
+        IActionResult ToHome()
+        {
+            return RedirectToRoute(new RouteValueDictionary()
+            {
+                { "controller", "Home" },
+                { "action", "Index" }
+            });
         }
     }
 }

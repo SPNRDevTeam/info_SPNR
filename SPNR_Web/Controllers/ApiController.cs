@@ -21,8 +21,8 @@ namespace SPNR_Web.Controllers
                 .Select(e => new EventResp()
                     {
                         Id = e.Id,
-                        Name = e.EventName,
-                        Description = e.EventDescription,
+                        Name = e.Name,
+                        Description = e.Description,
                         ImgPath = e.ImgPath
                     }));
 

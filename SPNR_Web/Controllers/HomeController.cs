@@ -21,7 +21,8 @@ namespace SPNR_Web.Controllers
         {
             HomeIndexVM VM = new HomeIndexVM();
             VM.Events = _unit.EventRepo.ReadAll();
-            VM.News = _unit.NewsRepo.ReadAll().OrderBy(n => n.PublicationTime);
+            VM.News = _unit.NewsRepo.ReadAll();
+            VM.MediaLinks = _unit.MediaLinkRepo.ReadAll();
             return View(VM);
         }
         public IActionResult Event(Guid id)
@@ -35,7 +36,7 @@ namespace SPNR_Web.Controllers
         }
         public IActionResult News()
         {
-            IEnumerable<News> news = _unit.NewsRepo.ReadAll().OrderBy(n => n.PublicationTime);
+            IEnumerable<News> news = _unit.NewsRepo.ReadAll();
             return View(news);
         }
         public IActionResult About() 
@@ -44,7 +45,7 @@ namespace SPNR_Web.Controllers
         }
         public IActionResult Media() 
         {
-            IEnumerable<MediaLink> links = _unit.MediaLinkRepo.ReadAll().OrderBy(l => l.CreationTime);
+            IEnumerable<MediaLink> links = _unit.MediaLinkRepo.ReadAll();
             return View(links);
         }
     }

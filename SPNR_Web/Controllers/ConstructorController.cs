@@ -20,6 +20,7 @@ namespace SPNR_Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Event(Event @event)
         {

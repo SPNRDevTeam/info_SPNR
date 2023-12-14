@@ -65,6 +65,7 @@ namespace SPNR_Web.Controllers
             return ToHome();
         }
 
+        [NonAction]
         IActionResult ToHome()
         {
             return RedirectToRoute(new RouteValueDictionary()

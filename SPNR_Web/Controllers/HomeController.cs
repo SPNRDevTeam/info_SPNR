@@ -28,7 +28,7 @@ namespace SPNR_Web.Controllers
         public IActionResult Event(Guid id)
         {
             Event? @event = _unit.EventRepo.ReadFirst(u => u.Id == id);
-            if (@event == null) return View(null);
+            if (@event == null) return RedirectToAction("Index");
 
             HomeEventVM VM = new HomeEventVM();
             VM.Event = @event;

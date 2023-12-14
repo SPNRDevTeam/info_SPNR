@@ -8,3 +8,4 @@ namespace SPNR_Web.Models.VMs
         public IEnumerable<News> News { get; set; }
     }
 }
+ 

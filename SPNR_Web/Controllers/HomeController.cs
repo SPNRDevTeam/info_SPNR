@@ -31,10 +31,6 @@ namespace SPNR_Web.Controllers
 
             HomeEventVM VM = new HomeEventVM();
             VM.Event = @event;
-            VM.Header = _unit.HeaderRepo.ReadFirst(h => h.EventId == id);
-            VM.HeaderLinks = _unit.HeaderLinkRepo.ReadWhere(l => l.HeaderId == VM.Header.Id);
-            VM.Blocks = _unit.BlockRepo.ReadWhere(b => b.EventId == id);
-            VM.SubEvents = _unit.SubEventRepo.ReadWhere(s => s.EventId == id);
             return View(VM);
         }
         public IActionResult News()

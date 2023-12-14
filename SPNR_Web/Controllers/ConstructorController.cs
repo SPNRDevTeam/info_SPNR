@@ -21,46 +21,13 @@ namespace SPNR_Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Event([FromBody] Event @event)
+        public IActionResult Event(Event @event)
         {
-            if (@event is null || @event.Header is null) return BadRequest();
-
-            @event.Id = Guid.NewGuid();
-            _unit.EventRepo.Add(@event);
-
-            Header header = @event.Header;
-            header.Id = Guid.NewGuid();
-            header.EventId = @event.Id;
-            _unit.HeaderRepo.Add(header);
-
-            foreach (HeaderLink link in header.Links)
-            {
-                link.Id = Guid.NewGuid();
-                link.HeaderId = header.Id;
-                _unit.HeaderLinkRepo.Add(link);
-            }
-
-            foreach (TextBlock block in @event.Blocks)
-            {
-                block.Id = Guid.NewGuid();
-                block.EventId = @event.Id;
-                _unit.BlockRepo.Add(block);
-            }
-
-            foreach (SubEvent sub in @event.SubEvents)
-            {
-                sub.Id = Guid.NewGuid();
-                sub.EventId = @event.Id;
-                _unit.SubEventRepo.Add(sub);
-            }
-
-            _unit.Save();
-
-            return Ok(@event.Id);
+            return Ok();
         }
 
         [HttpPost]
-        public IActionResult News([FromBody] News news)
+        public IActionResult News(News news)
         {
             if (news is null) return BadRequest();
             news.Id = Guid.NewGuid();
@@ -70,7 +37,7 @@ namespace SPNR_Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Media([FromBody] MediaLink link)
+        public IActionResult Media(MediaLink link)
         {
             if (link is null) link = new MediaLink();
             link.Id = Guid.NewGuid();
@@ -82,21 +49,6 @@ namespace SPNR_Web.Controllers
         [HttpDelete]
         public IActionResult Event(Guid id) 
         {
-            Event @event = _unit.EventRepo.ReadFirst(e => e.Id == id);
-            if (@event is null) return BadRequest();
-
-            Header header = _unit.HeaderRepo.ReadFirst(h => h.EventId == id);
-            IEnumerable<HeaderLink> links = _unit.HeaderLinkRepo.ReadWhere(hl => hl.HeaderId == header.Id);
-            IEnumerable<TextBlock> blocks = _unit.BlockRepo.ReadWhere(b => b.EventId == id);
-            IEnumerable<SubEvent> subs = _unit.SubEventRepo.ReadWhere(s => s.EventId == id);
-
-            _unit.SubEventRepo.RemoveRange(subs);
-            _unit.BlockRepo.RemoveRange(blocks);
-            _unit.HeaderLinkRepo.RemoveRange(links);
-            _unit.HeaderRepo.Remove(header);
-            _unit.EventRepo.Remove(@event);
-            _unit.Save();
-
             return Ok();
         }
         [HttpDelete]

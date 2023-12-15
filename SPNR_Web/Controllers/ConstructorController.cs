@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SPNR_Web.DataAccess;
 using SPNR_Web.Models.DataBase;
+using SPNR_Web.Utils;
 
 namespace SPNR_Web.Controllers
 {
     public class ConstructorController : Controller
     {
         IUnitOfWork _unit;
-        public ConstructorController(IUnitOfWork unit) 
+        IFileHandler _fileHandler;
+        public ConstructorController(IUnitOfWork unit, IFileHandler fileHandler) 
         {
             _unit = unit;
+            _fileHandler = fileHandler;
         }
         public IActionResult Event()
         {
@@ -22,8 +25,9 @@ namespace SPNR_Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Event(Event @event)
+        public IActionResult Event(Event @event, IFormFile? file)
         {
+            _fileHandler.Save(file);
             return ToHome();
         }
 

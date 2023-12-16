@@ -14,9 +14,12 @@ namespace SPNR_Web.Controllers
             _unit = unit;
             _fileHandler = fileHandler;
         }
-        public IActionResult Event()
+        public IActionResult Event(Guid? id)
         {
-            return View();
+            if (id is null) return View(new Event());
+            Event? @event = _unit.EventRepo.ReadFirst(e => e.Id == id);
+            if (@event is null) return ToHome();
+            return View(@event);
         }
 
         public IActionResult News()
@@ -27,7 +30,23 @@ namespace SPNR_Web.Controllers
         [HttpPost]
         public IActionResult Event(Event @event, IFormFile? file)
         {
-            _fileHandler.Save(file);
+            if (@event.Id == Guid.Empty)
+            {
+                @event.Id = Guid.NewGuid();
+                if (file is not null) @event.ImgPath = _fileHandler.Save(file);
+                _unit.EventRepo.Add(@event);
+            }
+            else
+            {
+                if (file is not null)
+                {
+                    _fileHandler.Delete(@event.ImgPath);
+                    @event.ImgPath = _fileHandler.Save(file);
+                }
+                _unit.EventRepo.Update(@event);
+            }
+            _unit.Save();
+            //toastr
             return ToHome();
         }
 
@@ -51,13 +70,23 @@ namespace SPNR_Web.Controllers
             return Ok(link.Id);
         }
 
-        [HttpDelete]
-        public IActionResult Event(Guid id) 
+        public IActionResult EventDelete(Guid id) 
         {
-            return Ok();
+            Event @event = _unit.EventRepo.ReadFirst(e => e.Id == id);
+            if (@event is null)
+            {
+                //toastr
+            }
+            else 
+            {
+                //toastr
+                _fileHandler.Delete(@event.ImgPath);
+                _unit.EventRepo.Remove(@event);
+                _unit.Save();
+            }
+            return ToHome(/*toastr msg*/);
         }
-        [HttpDelete]
-        public IActionResult News(Guid id)
+        public IActionResult NewsDelete(Guid id)
         {
             News news = _unit.NewsRepo.ReadFirst(n => n.Id == id);
             if (news is null) return BadRequest();
@@ -65,8 +94,7 @@ namespace SPNR_Web.Controllers
             _unit.Save();
             return Ok();
         }
-        [HttpDelete]
-        public IActionResult Media(Guid id)
+        public IActionResult MediaDelete(Guid id)
         {
             MediaLink link = _unit.MediaLinkRepo.ReadFirst(l => l.Id == id);
             if (link is null) return BadRequest();

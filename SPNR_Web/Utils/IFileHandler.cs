@@ -3,6 +3,6 @@
     public interface IFileHandler
     {
         string? Save(IFormFile? file);
-        void Delete(string path);
+        void Delete(string? path);
     }
 }

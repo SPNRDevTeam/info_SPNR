@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 builder.Services.AddSession();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IFileHandler, FileHandler>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 

@@ -21,30 +21,13 @@ namespace SPNR_Web.Controllers
                 .Select(e => new EventResp()
                     {
                         Id = e.Id,
-                        Name = e.EventName,
-                        Description = e.EventDescription,
+                        Name = e.Name,
+                        Description = e.Description,
                         ImgPath = e.ImgPath
                     }));
 
             Event? @event = _unit.EventRepo.ReadFirst(e => e.Id == id);
             if (@event is null) return BadRequest();
-
-            @event.Header = _unit.HeaderRepo.ReadFirst(h => h.EventId == @event.Id);
-
-            @event.Header.Links = _unit.HeaderLinkRepo
-                .ReadWhere(l => l.HeaderId == @event.Header.Id)
-                .OrderBy(l => l.DisplayOrder)
-                .ToList();
-
-            @event.Blocks = _unit.BlockRepo
-                .ReadWhere(b => b.EventId == @event.Id)
-                .OrderBy(b => b.DisplayOrder)
-                .ToList();
-
-            @event.SubEvents = _unit.SubEventRepo
-                .ReadWhere(s => s.EventId == @event.Id)
-                .OrderBy(s => s.Start)
-                .ToList();
 
             return Ok(@event);
         }

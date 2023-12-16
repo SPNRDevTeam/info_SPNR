@@ -4,7 +4,7 @@
 // FIXME: IMPORTANT! add automatic sizing for apps 
 
 import 'pages/event.dart' as event;
-import 'pages/calendar.dart' as calendar;
+// import 'pages/calendar.dart' as calendar;
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {     // App class
   int _currentPage = 0;
   static List<Widget> _pages = [
     event.EventListBuilder(),
-    calendar.CalendarBuilder(),
+    
   ];
 
   @override
@@ -67,10 +67,12 @@ class _MainPageState extends State<MainPage> {     // App class
             icon: Icon(Icons.home_outlined),
             label: 'Главная',
           ),
+          /* // event calendar: didn't meet deadlines which is why this is commented
           BottomNavigationBarItem( // calendar
             icon: Icon(Icons.calendar_month),
             label: 'Календарь', 
           ),
+          */
           BottomNavigationBarItem( // favorited events
             icon: Icon(Icons.favorite),
             label: 'Избранное',

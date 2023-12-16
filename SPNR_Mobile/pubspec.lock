@@ -211,10 +211,11 @@ packages:
   table_calendar:
     dependency: "direct main"
     description:
-      name: table_calendar
-      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "577566f6ae0ee08f713f4bea311ba60b04d1e9f6"
+      url: "https://github.com/Evgen1987RUS/table_calendar_dark_mode"
+    source: git
     version: "3.0.9"
   term_glyph:
     dependency: transitive

@@ -7,7 +7,7 @@ namespace SPNR_Web.Utils
         readonly string _rootPath;
         public FileHandler(IWebHostEnvironment webHost)
         {
-            _rootPath = webHost.WebRootPath;
+            _rootPath = webHost.WebRootPath.Replace('\\', '/');
         }
 
         public void Delete(string? path)
@@ -26,7 +26,7 @@ namespace SPNR_Web.Utils
             string _mediaPath = Path.Combine(_rootPath, @"media");
             string newFilename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             string fullPath = Path.Combine(_mediaPath, newFilename);
-            string retPath = Path.Combine("~\\media", newFilename);
+            string retPath = Path.Combine("~/media", newFilename);
 
             using (var fStream = new FileStream(fullPath, FileMode.Create))
             {

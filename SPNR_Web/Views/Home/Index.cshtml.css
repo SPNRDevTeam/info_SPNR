@@ -1,0 +1,91 @@
+﻿.news-date {
+    background-color: #0069b1;
+    color: white;
+    display: inline-block;
+    border-radius: 2px;
+    margin-bottom: 0;
+    font-size: 16px;
+    padding: 3px 5px;
+}
+
+.row-news {
+    border-top: 5px solid #d6e4ef; /* Голубой цвет обводки */
+    border-right: 1px solid #d6e4ef;
+    border-left: 1px solid #d6e4ef;
+    border-bottom: 1px solid #d6e4ef;
+    padding: 18px;
+}
+
+.news-card {
+    border-bottom: 1px solid #d6e4ef;
+    border-top: 1px solid #d6e4ef;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.news-name {
+    font-size: 16px;
+    color: #494d50;
+    line-height: 26px;
+    margin-top: 10px;
+}
+
+.news-description {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.all-news {
+    padding-top: 10px;
+    font-size: 17px;
+    color: #3a67ad;
+}
+
+    .all-news a {
+        color: #3a67ad;
+        text-decoration: none;
+    }
+
+.container-fluid {
+    padding-right: 75px !important;
+    padding-left: 75px !important;
+}
+
+.event-card {
+    border-top: 1px solid white;
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+}
+
+.event-date {
+    font-size: 14px;
+    color: #999;
+}
+
+.event-title {
+    font-size: 17px;
+    color: #494d50;
+}
+
+    .event-title a {
+        color: #494d50;
+        text-decoration: none;
+    }
+
+.event-title {
+    font-size: 17px;
+    color: #494d50;
+}
+
+    .event-title a {
+        color: #494d50;
+        text-decoration: none;
+    }
+
+.links {
+    font-size: 30px;
+}
+
+    .links a {
+        text-decoration: none;
+    }

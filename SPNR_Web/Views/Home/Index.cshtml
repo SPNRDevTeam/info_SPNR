@@ -1,61 +1,68 @@
 ﻿@model HomeIndexVM
 @{
-ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная страница";
 }
 
 
-
-<div class="container-fluid px-md-5">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
-            <h3>Новости</h3>
+        <div class="col-md-3">
             @if (Model.News != null && Model.News.Any())
             {
-                <div class="row">
-                    @foreach (var news in Model.News)
+                <div class="row-news">
+                    <h3 style="margin-bottom:18px; color:#0069b1;">
+                        Новости
+                    </h3>
+                    @foreach (var news in Model.News.Take(3))
                     {
                         <div class="news-card">
-                            <img src="@news.ImgUrl" class="img-fluid rounded-start" alt="Event Image">
-                            <div class="card-body">
-
-                                <p class="news-data">@news.PublicationTime.ToShortDateString()</p>
-                                <h5 class="news-name">@news.Name</h5>
-                                <p class="news-description">@news.Description</p>
+                            <div class="news-date">@news.PublicationTime.ToShortDateString()</div>
+                            <div class="news-img">
+                                <img src="@news.ImgPath" class="img-fluid rounded-start" alt="@news.ImgPath">
                             </div>
+                            <h5 class="news-name">@news.Name</h5>
+                            <p class="news-description">@news.Description</p>
                         </div>
                     }
+                    <div class="all-news">
+                        <a href="home/news">Все новости</a>
+                    </div>
                 </div>
-            }  
+            }
+
         </div>
         <div class="col-md-7">
-            <div class="events px-md-5">
-                @foreach (var Event in Model.Events)
-                {
-                    <div class="card mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="@Event.ImgPath" class="img-fluid rounded-start" alt="Event Image">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <p class="card-text">@Event.DateTime.ToShortDateString()</p>
-                                    <h5 class="card-title">@Event.EventName</h5>
-                                </div>
+            <h3 style="margin-bottom:18px; color:#0069b1">
+                Ивенты
+            </h3>
+            @foreach (var Event in Model.Events)
+            {
+                //Event.ImgPath = "https://localhost:7147/" + Event.ImgPath.Replace('~', '/');
+                <div class="card mb-3 event-card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src=@Event.ImgPath alt="Event @Event.Id">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="event-date">@Event.DateTime.ToShortDateString()</div>
+                                <span class="event-title">
+                                    <a href="home/@Event.Id">@Event.Name</a>
+                                </span>
                             </div>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
         <div class="col-md-2">
             <div class="links">
                 <h4>Ссылки</h4>
                 <ul>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Media</a></li>
+                    <li><a href="home/about">О сайте</a></li>
+                    <li><a href="home/media">Медиа</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-

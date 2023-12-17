@@ -23,7 +23,8 @@ namespace SPNR_Web.Controllers
                         Id = e.Id,
                         Name = e.Name,
                         Description = e.Description,
-                        ImgPath = e.ImgPath
+                        DateTime = e.DateTime.ToString("u"),
+                        ImgPath = e.ImgPath == null ? "null" : e.ImgPath 
                     }));
 
             Event? @event = _unit.EventRepo.ReadFirst(e => e.Id == id);

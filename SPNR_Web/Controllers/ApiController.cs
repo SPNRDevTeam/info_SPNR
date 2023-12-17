@@ -24,6 +24,7 @@ namespace SPNR_Web.Controllers
                         Name = e.Name,
                         Description = e.Description,
                         DateTime = e.DateTime.ToString("u"),
+                        Text = e.Text,
                         ImgPath = e.ImgPath == null ? "null" : e.ImgPath 
                     }));
 

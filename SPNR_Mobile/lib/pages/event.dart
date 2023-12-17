@@ -8,8 +8,7 @@ import 'dart:convert';
 
 
 Future<List<Event>> fetchEvents(http.Client client) async { // fetches json and starts an isolated parsing of the events
-  final response = await http.get(Uri.parse(
-      'https://my-json-server.typicode.com/Evgen1987RUS/test-json/events/')); // TODO: тестовый джей сон поменять на нормальный
+  final response = await http.get(Uri.parse('http://localhost:5150/Api/Events')); // TODO: тестовый джей сон поменять на нормальный
 
   return compute(parseEvents, response.body);
 }
@@ -24,14 +23,14 @@ class Event { // struct of an <Event> type objects
   final String id;
   final String name;
   final String description;
-  final String date;
+  final String dateTime;
   final String imgPath;
 
   const Event({
     required this.id,
     required this.name,
     required this.description,
-    required this.date,
+    required this.dateTime,
     required this.imgPath,
   });
 
@@ -40,7 +39,7 @@ class Event { // struct of an <Event> type objects
       id: json['id'] as String,                       // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
       name: json['name'] as String,                   // this is the code + an explanation
       description: json['description'] as String,
-      date: json['date'] as String,
+      dateTime: json['dateTime'] as String,
       imgPath: json['imgPath'] as String,
     );
   }
@@ -51,18 +50,18 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
   final Event event;
 
   Row timestamptzToText(Event event) { // parsing the timestamptz data type from the database
-    final parsedYearMonth = event.date.split('-');
-    var month = parsedYearMonth[1];
+    final yearMonthDay = event.dateTime.split('-');
+    var month = yearMonthDay[1];
     final months = ['ЯНВ', 'ФЕВ', 'МАР', 'АПР', 'МАЙ', 'ИЮН', 'ИЮЛ', 'АВГ', 'СЕН', 'ОКТ', 'НОЯ', 'ДЕК'];
     month = months[int.parse(month) - 1];
 
-    final parsedDayTime = parsedYearMonth[2].split(' ');
+    final parsedDayTime = yearMonthDay[2].split(' ');
     final day = parsedDayTime[0];
     final time = parsedDayTime[1];
 
     final parsedTime = time.split(':');
 
-    return Row( // this displays the date and time of the event
+    return Row( // this displays the dateTime and time of the event
       children: [
         Column(
           children: [
@@ -204,11 +203,11 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
   }
 
   Column printTimeOfEvent(Event event) {
-    final parsedYearMonth = event.date.split('-');
-    final year = parsedYearMonth[0];
-    var month = parsedYearMonth[1];
+    final yearMonthDay = event.dateTime.split('-');
+    final year = yearMonthDay[0];
+    var month = yearMonthDay[1];
 
-    final parsedDayTime = parsedYearMonth[2].split(' ');
+    final parsedDayTime = yearMonthDay[2].split(' ');
     final day = parsedDayTime[0];
     final time = parsedDayTime[1];
     final parsedTime = time.split(':');

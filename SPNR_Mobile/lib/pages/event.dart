@@ -1,5 +1,6 @@
 // event.dart is responsible for all event items and their pages
 
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,7 @@ class Event { // struct of an <Event> type objects
   final String name;
   final String description;
   final String dateTime;
+  final String text;
   final String imgPath;
 
   const Event({
@@ -31,6 +33,7 @@ class Event { // struct of an <Event> type objects
     required this.name,
     required this.description,
     required this.dateTime,
+    required this.text,
     required this.imgPath,
   });
 
@@ -40,6 +43,7 @@ class Event { // struct of an <Event> type objects
       name: json['name'] as String,                   // this is the code + an explanation
       description: json['description'] as String,
       dateTime: json['dateTime'] as String,
+      text: json['text'] as String,
       imgPath: json['imgPath'] as String,
     );
   }
@@ -196,7 +200,7 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
   dynamic displayImage(String imgPath) {
     if (imgPath.isNotEmpty) {
       print('displayed an image');
-      return Image.network(event.imgPath);
+      return Image.network('http://localhost:5150/media/${event.imgPath.replaceAll('\\', '/').split('/')[2]}', fit: BoxFit.fitHeight,); // displays an image
     } else {
       print('image fetch failure');
     }
@@ -232,7 +236,7 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
       ),
       body: ListView(
         children: [
-            //displayImage(event.imgPath), // TODO: check with real urls to see if this works // TODO: add automatic resize
+            displayImage(event.imgPath), // TODO: check with real urls to see if this works // TODO: add automatic resize
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: printTimeOfEvent(event),
@@ -241,7 +245,10 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
-              child: Text(event.description, style: TextStyle(color: Colors.white, fontSize: 20),),
+              child: HtmlWidget( // transforms html format to a flutter widget format
+                event.text,
+                textStyle: TextStyle(fontSize: 20, color: Colors.white),
+              ),
             ),
           ],
         ),

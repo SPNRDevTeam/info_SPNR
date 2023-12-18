@@ -1,9 +1,76 @@
 ﻿@model HomeIndexVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная страница";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Events list here</p>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            @if (Model.News != null && Model.News.Any())
+            {
+                <div class="row-news">
+                    <h3 style="margin-bottom:18px; color:#0069b1;">
+                        Новости
+                    </h3>
+                    @foreach (var news in Model.News.Take(3))
+                    {
+                        news.ImgPath = news.ImgPath == null ? null : "https://localhost:44398/" + news.ImgPath.Replace('~', '/');
+                        <div class="news-card">
+                            <div class="news-date">@news.PublicationTime.ToShortDateString()</div>
+                            <div class="news-img-conteiner">
+                                <img src="@news.ImgPath" alt="@news.Id" class="news-img">
+                            </div>
+                            <h5 class="news-name">@news.Name</h5>
+                            <p class="news-description">@news.Description</p>
+                        </div>
+                    }
+                    <div class="all-news">
+                        <a href="home/news">Все новости</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+            <h3 style="color:#0069b1;">
+                Нет новостей
+            </h3>
+            }
+        </div>
+        <div class="col-md-7">
+            <h3 style="margin-bottom:18px; margin-top:18px; color:#0069b1">
+                Ивенты
+            </h3>
+            <div class="row-events">
+                @foreach (var Event in Model.Events)
+                {
+                    Event.ImgPath = Event.ImgPath == null ? null : "https://localhost:44398/" + Event.ImgPath.Replace('~', '/');
+                    <div class="card event-card">
+                        <div class="row g-0">
+                            <div class="col-md-3 event-image-container">
+                                <img src="@Event.ImgPath" alt="Event @Event.Id" class="event-image">
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <div class="event-date">@Event.DateTime.ToShortDateString()</div>
+                                    <span class="event-title">
+                                        <a href="home/@Event.Id">@Event.Name</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="links" style="margin-bottom: 50px">
+                <h3 style="margin-bottom:18px; color:#0069b1">
+                    Ссылки
+                </h3>
+                <p><a href="home/about">О сайте</a></p>
+                <p><a href="home/media">Медиа</a></p>
+        </div>
+        </div>
+    </div>
 </div>

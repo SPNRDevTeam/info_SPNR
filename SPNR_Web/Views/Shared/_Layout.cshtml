@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SPNR_Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">SPNR_Web</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -21,26 +22,38 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Домой</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Add">Add New Event</a>
+                            <a class="nav-link text-white" asp-controller="constructor" asp-action="event">Добавить ивент</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="constructor" asp-action="news">Добавить новость</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-auth" align="right">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="auth" asp-action="login">Войти</a>  
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="auth" asp-action="register">Зарегистрироваться</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="pb-3">
+        <partial name="_Toastr" />
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - SPNR_Web - <a asp-controller="Home" asp-action="Add">Add New Events</a>
-        </div>
+    <footer class="footer text-center py-3" style="background-color:#0067b1; line-height:10px; color: white;position:absolute;bottom: 0">
+        <p>Адрес: Кампус ДВФУ, о. Русский, Владивосток, Россиия</p>
+        <p>Контакты: example@example.com</p>
+        <p>Телефон: +7 123 456 789</p>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

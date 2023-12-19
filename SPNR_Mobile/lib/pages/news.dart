@@ -37,7 +37,7 @@ class NewsListBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 7, height: 7, color: Colors.grey),
       itemCount: news.length,
       shrinkWrap: true,
       itemBuilder: (context, int index) {
@@ -46,16 +46,24 @@ class NewsListBuilder extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             displayImage(news[index]),
-            Divider(),
+            Divider(
+              thickness: 3,
+              height: 3,
+              color: Colors.grey
+            ),
             Center(
               child: Container(
-                padding: EdgeInsets.only(left: 5.0),
+                padding: EdgeInsets.only(left: 15.0),
                 child: Text(news[index].name, style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold))
               ),
             ),
-            Divider(),
+            Divider(
+              thickness: 3,
+              height: 3,
+              color: Colors.grey
+            ),
             Container(
-              padding: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: 15.0),
               child: ReadMoreText(
                 '${news[index].description} ',
                 trimCollapsedText: 'Развернуть', 
@@ -87,9 +95,9 @@ class NewsList extends StatelessWidget { // shows news on the page
           child: Text('Новости:', style: TextStyle(fontSize: 25 ,color: Colors.white)), 
         ),
         Divider(
-          thickness: 2.0,
-          color: Colors.grey, // TODO: change color
-          height: 0,
+          thickness: 7,
+          height: 7, 
+          color: Colors.grey,
         ),
         FutureBuilder(
           future: fetchData(http.Client(), 'News'),

@@ -55,7 +55,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               alignment: Alignment.center,
               child: Text(
                 day,
-                style: TextStyle(fontSize: 40, color: Colors.red),
+                style: TextStyle(fontSize: 30, color: Colors.red),
               ),
             ),
             Container(
@@ -63,7 +63,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               alignment: Alignment.center,
               child: Text(
                 month,
-                style: TextStyle(fontSize: 20, color: Colors.red),
+                style: TextStyle(fontSize: 23, color: Colors.red),
               ),
             ),
           ],
@@ -73,7 +73,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
           quarterTurns: 1,
           child: Text(
             '${parsedTime[0]}:${parsedTime[1]}',
-            style: TextStyle(fontSize: 27, color: Colors.red),
+            style: TextStyle(fontSize: 34, color: Colors.red),
           ),
         ),
       ],

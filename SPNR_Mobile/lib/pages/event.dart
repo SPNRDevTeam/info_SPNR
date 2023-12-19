@@ -4,8 +4,11 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:async';
 import 'dart:convert';
+
+import '../utilities.dart' as utils;
 
 
 Future<List<Event>> fetchEvents(http.Client client) async { // fetches json and starts an isolated parsing of the events
@@ -139,15 +142,15 @@ class EventsList extends StatelessWidget {
   Widget build(BuildContext context) { // creates the list of the events
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: events.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          print('item shown');
-          return Container(
-            child: EventDescription(event: events[index]), // this is the item that goes into the list
-          );
-        });
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemCount: events.length,
+      shrinkWrap: true,
+      itemBuilder: (context, int index) {
+        print('item shown');
+        return Container( // even though this is highlighted as unnecessary use: this is very much necessary as the future builder will ignore the description without it being in a container 
+          child: EventDescription(event: events[index]), // this is the item that goes into the list
+        );
+      });
   }
 }
 
@@ -162,7 +165,6 @@ class EventListBuilder extends StatelessWidget {
           height: 40,
           padding: EdgeInsets.only(left: 15.0),
           color: Color.fromRGBO(33, 37, 41, 1),
-          width: double.infinity,
           child: Text('Ближайшие мероприятия:', style: TextStyle(fontSize: 25 ,color: Colors.white)), // TODO: check if the scaling is off on ALL devices
         ),
         Divider(
@@ -181,13 +183,15 @@ class EventListBuilder extends StatelessWidget {
             } else if (snapshot.hasData) {
               return EventsList(events: snapshot.data!); // calls the class to create a list of all of the events
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Padding(
+                padding: EdgeInsets.only(top: 15.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             }
           },
         ),
-        // FIXME: this is where the calendar is supposed to go
       ],
     );
   }
@@ -196,15 +200,6 @@ class EventListBuilder extends StatelessWidget {
 class EventPage extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
   const EventPage({super.key, required this.event});
   final Event event;
-
-  dynamic displayImage(String imgPath) {
-    if (imgPath.isNotEmpty) {
-      print('displayed an image');
-      return Image.network('http://localhost:5150/media/${event.imgPath.replaceAll('\\', '/').split('/')[2]}', fit: BoxFit.fitHeight,); // displays an image
-    } else {
-      print('image fetch failure');
-    }
-  }
 
   Column printTimeOfEvent(Event event) {
     final yearMonthDay = event.dateTime.split('-');
@@ -236,7 +231,7 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
       ),
       body: ListView(
         children: [
-            displayImage(event.imgPath), // TODO: check with real urls to see if this works // TODO: add automatic resize
+            utils.displayImage(event), // TODO: check with real urls to see if this works // TODO: add automatic resize
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: printTimeOfEvent(event),

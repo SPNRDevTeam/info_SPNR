@@ -34,13 +34,25 @@ namespace SPNR_Web.Controllers
             return Ok(@event);
         }
         [HttpGet]
-        public IActionResult News(int n)
+        public IActionResult News(Guid? id)
         {
-            return Ok(
-                _unit.NewsRepo
-                .ReadAll()
+            if (id is null) return Ok(
+                _unit.NewsRepo.ReadAll() 
                 .OrderBy(n => n.PublicationTime)
-                .Take(n));
+                .Select(n => new NewsResp()
+                    {
+                        Id = n.Id,
+                        Name = n.Name,
+                        Description = n.Description,
+                        DateTime = n.PublicationTime.ToString("u"),
+                        //Text = n.Text,
+                        ImgPath = n.ImgPath == null ? "null" : n.ImgPath 
+                    }));
+
+            News? @news = _unit.NewsRepo.ReadFirst(n => n.Id == id);
+            if (@news is null) return BadRequest();
+
+            return Ok(@news);
         }
         [HttpGet]
         public IActionResult Media(int n)

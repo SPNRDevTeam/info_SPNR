@@ -38,7 +38,7 @@ namespace SPNR_Web.Controllers
         {
             if (id is null) return Ok(
                 _unit.NewsRepo.ReadAll() 
-                .OrderBy(n => n.PublicationTime)
+                .OrderByDescending(n => n.PublicationTime)
                 .Select(n => new NewsResp()
                     {
                         Id = n.Id,

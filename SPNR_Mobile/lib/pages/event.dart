@@ -97,10 +97,12 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
                 SizedBox(
-                  height: 60,
                   width: width * 0.65,
+                  child: Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 2)),
+                SizedBox(
+                  width: width * 0.65,
+                  height: 60,
                   child: Text(event.description, style: TextStyle(color: Colors.white, fontSize:  20), overflow: TextOverflow.ellipsis, maxLines: 2)
                 ),
               ],

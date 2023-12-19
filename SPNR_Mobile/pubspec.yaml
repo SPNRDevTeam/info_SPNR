@@ -23,6 +23,7 @@ dependencies:
     git: 
       url: "https://github.com/Evgen1987RUS/table_calendar_dark_mode"
   flutter_widget_from_html: ^0.14.9
+  readmore: ^2.2.0
 
 dev_dependencies:
   flutter_test:

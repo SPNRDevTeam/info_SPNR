@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:readmore/readmore.dart';
 
 import '../utilities.dart';
 
@@ -42,20 +43,26 @@ class NewsListBuilder extends StatelessWidget {
       itemBuilder: (context, int index) {
         print('article shown');
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             displayImage(news[index]),
             Divider(),
-            Container(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Text(news[index].name, style: TextStyle(fontSize: 20, color: Colors.white))
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Text(news[index].name, style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold))
+              ),
             ),
             Divider(),
             Container(
               padding: EdgeInsets.only(left: 10.0),
-              child: SizedBox(
-                height: 150, // TODO: look for appropriate height
-                width: MediaQuery.of(context).size.width * 0.65,
-                child: Text(news[index].description, style: TextStyle(fontSize: 20, color: Colors.white),),
+              child: ReadMoreText(
+                '${news[index].description} ',
+                trimCollapsedText: 'Развернуть', 
+                trimExpandedText: 'Свернуть', 
+                style: TextStyle(fontSize: 20, color: Colors.white), 
+                moreStyle: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.bold),
+                colorClickableText: Colors.grey,
               ),
             )
           ],

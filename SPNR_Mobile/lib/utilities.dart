@@ -75,14 +75,14 @@ class NewsArticle {
   final String id;
   final String name;
   final String description;
-  final String date;
+  final String dateTime;
   final String imgPath;
 
   const NewsArticle({
     required this.id,
     required this.name,
     required this.description,
-    required this.date,
+    required this.dateTime,
     required this.imgPath,
   });
 // TODO: change to whatever data I am pulling from the JSON
@@ -91,7 +91,7 @@ class NewsArticle {
       id: json['id'] as String,                             // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
       name: json['name'] as String,                         // this is the code + an explanation
       description: json['description'] as String,
-      date: json['date'] as String,
+      dateTime: json['dateTime'] as String,
       imgPath: json['imgPath'] as String,
     );
   }

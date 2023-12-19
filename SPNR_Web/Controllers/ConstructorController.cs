@@ -40,6 +40,11 @@ namespace SPNR_Web.Controllers
         [HttpPost]
         public IActionResult Event(Event @event, IFormFile? file)
         {
+            if (@event.Text is null)
+            {
+                TempData["error"] = "Текст события не должен быть пустым.";
+                return ToHome();
+            }
             if (@event.Id == Guid.Empty)
             {
                 @event.Id = Guid.NewGuid();

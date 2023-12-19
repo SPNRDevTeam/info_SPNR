@@ -33,9 +33,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {     // App class
   _MainPageState({Key? key});
   int _currentPage = 0;
+  
   static List<Widget> _pages = [
-    event.EventListBuilder(),
-    news.NewsList(),
+    event.EventPage(),
+    news.NewsPage(),
   ];
 
   @override

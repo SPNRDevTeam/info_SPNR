@@ -1,54 +1,32 @@
 // event.dart is responsible for all event items and their pages
 
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
-import 'dart:convert';
 
-import '../utilities.dart' as utils;
+import '../utilities.dart';
 
+class EventPage extends StatefulWidget {
+  const EventPage({super.key});
 
-Future<List<Event>> fetchEvents(http.Client client) async { // fetches json and starts an isolated parsing of the events
-  final response = await http.get(Uri.parse('http://localhost:5150/Api/Events')); // TODO: тестовый джей сон поменять на нормальный
-
-  return compute(parseEvents, response.body);
+  @override
+  State<EventPage> createState() => _EventPageState();
 }
 
-List<Event> parseEvents(String responseBody) { // decodes the json and casts into a map of strings
-  final parsed = (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>();
+class _EventPageState extends State<EventPage> {
+  _EventPageState({Key? key});
+  Future<List<dynamic>> events = fetchData(http.Client(), 'Events');
 
-  return parsed.map<Event>((json) => Event.fromJson(json)).toList(); // maps the events and then turns them into lists (very complicated stuff, surprised this works)
-}
-
-class Event { // struct of an <Event> type objects
-  final String id;
-  final String name;
-  final String description;
-  final String dateTime;
-  final String text;
-  final String imgPath;
-
-  const Event({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.dateTime,
-    required this.text,
-    required this.imgPath,
-  });
-
-  factory Event.fromJson(Map<String, dynamic> json) { // fetches json's variables and maps them to the <Event> object
-    return Event(                                     // also possible to write with a newer implementation in .dart (pattern matching for json)
-      id: json['id'] as String,                       // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
-      name: json['name'] as String,                   // this is the code + an explanation
-      description: json['description'] as String,
-      dateTime: json['dateTime'] as String,
-      text: json['text'] as String,
-      imgPath: json['imgPath'] as String,
-    );
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        events = fetchData(http.Client(), 'Events');
+        setState((){});
+      },
+      child: EventListBuilder(events: events));
   }
 }
 
@@ -108,7 +86,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EventPage(event: event)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EventPageOnPush(event: event)));
       },
       child: Row(
         children: <Widget>[
@@ -136,7 +114,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
 class EventsList extends StatelessWidget {
   const EventsList({super.key, required this.events});
-  final List<Event> events;
+  final List<dynamic> events;
 
   @override
   Widget build(BuildContext context) { // creates the list of the events
@@ -155,7 +133,8 @@ class EventsList extends StatelessWidget {
 }
 
 class EventListBuilder extends StatelessWidget {
-  const EventListBuilder({super.key});
+  EventListBuilder({super.key, required this.events});
+  final Future<List<dynamic>> events;
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +151,8 @@ class EventListBuilder extends StatelessWidget {
           color: Colors.grey, // TODO: change color
           height: 0,
         ),
-        FutureBuilder<List<Event>>( // builds this widget in the future
-          future: fetchEvents(http.Client()),
+        FutureBuilder<List<dynamic>>( // builds this widget in the future
+          future: events,
           builder: (context, snapshot) { // fetches snapshots
             if (snapshot.hasError) {
               print('snapshot failure');
@@ -197,8 +176,8 @@ class EventListBuilder extends StatelessWidget {
   }
 }
 
-class EventPage extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
-  const EventPage({super.key, required this.event});
+class EventPageOnPush extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
+  const EventPageOnPush({super.key, required this.event});
   final Event event;
 
   Column printTimeOfEvent(Event event) {
@@ -231,7 +210,7 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
       ),
       body: ListView(
         children: [
-            utils.displayImage(event), // TODO: check with real urls to see if this works // TODO: add automatic resize
+            displayImage(event), // TODO: check with real urls to see if this works // TODO: add automatic resize
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: printTimeOfEvent(event),

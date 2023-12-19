@@ -1,54 +1,36 @@
 // news.dart is responsible for the news page
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 
-import '../utilities.dart' as utils;
+import '../utilities.dart';
 
-Future<List<NewsArticle>> fetchNews(http.Client client) async {
-  final response = await http.get(Uri.parse('http://localhost:5150/Api/News'));
+class NewsPage extends StatefulWidget {
+  const NewsPage({Key? key});
 
-  return compute(parseNews, response.body);
+  @override
+  State<NewsPage> createState() => _NewsPageState();
 }
 
-List<NewsArticle> parseNews(String responseBody) {
-  final parsed = (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>(); // decodes the json and casts into a map of strings
+class _NewsPageState extends State<NewsPage> {
+  _NewsPageState({Key? key});
+  Future<List<dynamic>> news = fetchData(http.Client(), 'News');
 
-  return parsed.map<NewsArticle>((json) => NewsArticle.fromJson(json)).toList();
-}
-
-class NewsArticle {
-  final String id;
-  final String name;
-  final String description;
-  final String date;
-  final String imgPath;
-
-  const NewsArticle({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.date,
-    required this.imgPath,
-  });
-// TODO: change to whatever data I am pulling from the JSON
-  factory NewsArticle.fromJson(Map<String, dynamic> json) { // fetches json's variables and maps them to the <Event> object
-    return NewsArticle(                                     // also possible to write with a newer implementation in .dart (pattern matching for json)
-      id: json['id'] as String,                             // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
-      name: json['name'] as String,                         // this is the code + an explanation
-      description: json['description'] as String,
-      date: json['date'] as String,
-      imgPath: json['imgPath'] as String,
+  @override
+  build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        news = fetchData(http.Client(), 'News');
+        setState((){});
+      },
+      child: NewsList(news: news),
     );
   }
 }
 
 class NewsListBuilder extends StatelessWidget {
   const NewsListBuilder({super.key, required this.news});
-  final List<NewsArticle> news;
+  final List<dynamic> news;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +43,7 @@ class NewsListBuilder extends StatelessWidget {
         print('article shown');
         return Column(
           children: [
-            utils.displayImage(news[index]),
+            displayImage(news[index]),
             Divider(),
             Container(
               padding: EdgeInsets.only(left: 5.0),
@@ -84,7 +66,8 @@ class NewsListBuilder extends StatelessWidget {
 }
 
 class NewsList extends StatelessWidget { // shows news on the page
-  const NewsList({super.key});
+  const NewsList({super.key, required this.news});
+  final Future<List<dynamic>> news;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +85,7 @@ class NewsList extends StatelessWidget { // shows news on the page
           height: 0,
         ),
         FutureBuilder(
-          future: fetchNews(http.Client()),
+          future: fetchData(http.Client(), 'News'),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(

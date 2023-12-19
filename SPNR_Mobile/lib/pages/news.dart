@@ -54,6 +54,7 @@ class NewsListBuilder extends StatelessWidget {
             Center(
               child: Container(
                 padding: EdgeInsets.only(left: 15.0),
+                color: Color.fromRGBO(33, 37, 41, 1),
                 child: Text(news[index].name, style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold))
               ),
             ),
@@ -95,8 +96,8 @@ class NewsList extends StatelessWidget { // shows news on the page
           child: Text('Новости:', style: TextStyle(fontSize: 25 ,color: Colors.white)), 
         ),
         Divider(
-          thickness: 7,
-          height: 7, 
+          thickness: 3,
+          height: 3, 
           color: Colors.grey,
         ),
         FutureBuilder(

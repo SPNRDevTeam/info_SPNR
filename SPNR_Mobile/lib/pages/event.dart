@@ -122,7 +122,7 @@ class EventsList extends StatelessWidget {
   Widget build(BuildContext context) { // creates the list of the events
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.grey, thickness: 2, height: 2),
       itemCount: events.length,
       shrinkWrap: true,
       itemBuilder: (context, int index) {
@@ -149,9 +149,9 @@ class EventListBuilder extends StatelessWidget {
           child: Text('Ближайшие мероприятия:', style: TextStyle(fontSize: 25 ,color: Colors.white)), // TODO: check if the scaling is off on ALL devices
         ),
         Divider(
-          thickness: 2.0,
-          color: Colors.grey, // TODO: change color
-          height: 0,
+          thickness: 3,
+          height: 3,
+          color: Colors.grey
         ),
         FutureBuilder<List<dynamic>>( // builds this widget in the future
           future: events,
@@ -218,6 +218,9 @@ class EventPageOnPush extends StatelessWidget { // this is the widget class for 
               child: printTimeOfEvent(event),
             ),
             Divider( // TODO: change properties
+              color: Colors.grey,
+              thickness: 3,
+              height: 3,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0),

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'pages/event.dart' as event;
 import 'pages/news.dart' as news;
+import 'pages/contacts.dart' as contacts;
 
 
 void main() => runApp(const SPNRApp()); // main method which starts this app
@@ -37,6 +38,7 @@ class _MainPageState extends State<MainPage> {     // App class
   static List<Widget> _pages = [
     event.EventPage(),
     news.NewsPage(),
+    contacts.ContactPage(),
   ];
 
   @override

@@ -478,6 +478,4 @@ $RECYCLE.BIN/
 
 # Web
 /SPNR_Web/appsettings.json
-
-# Images in database
-/SPNR_Web/wwwroot/media
+/SPNR_Web/wwwroot/media/*

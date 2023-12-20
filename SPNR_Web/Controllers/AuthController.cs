@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SPNR_Web.DataAccess;
 using SPNR_Web.Models.DataBase;
+using SPNR_Web.Utils;
 
 namespace SPNR_Web.Controllers
 {
@@ -14,23 +15,26 @@ namespace SPNR_Web.Controllers
         {
             _unit = unitOfWork;
         }
-
+        public IActionResult Unauthorized()
+        {
+            TempData["error"] = "Авторизуйтесь для доступа к этой функции";
+            return RedirectToAction("Login");
+        }
         public IActionResult Login()
         {
             return View();
         }
-
+        [SessionAuthFilter]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return ToHome();
         }
-
+        [SessionAuthFilter]
         public IActionResult Register()
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Login(User user)
         {
@@ -48,7 +52,7 @@ namespace SPNR_Web.Controllers
             HttpContext.Session.SetString("Login", user.Login);
             return ToHome();
         }
-
+        [SessionAuthFilter]
         [HttpPost]
         public IActionResult Register(User user)
         {

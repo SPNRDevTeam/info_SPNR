@@ -12,7 +12,7 @@ namespace SPNR_Web.Utils
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {
                     { "Controller", "Auth" },
-                    { "Action", "Login" }
+                    { "Action", "Unauthorized" }
                 });
             }
         }

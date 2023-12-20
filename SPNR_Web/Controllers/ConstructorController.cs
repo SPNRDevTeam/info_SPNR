@@ -14,6 +14,7 @@ namespace SPNR_Web.Controllers
             _unit = unit;
             _fileHandler = fileHandler;
         }
+        [SessionAuthFilter]
         public IActionResult Event(Guid? id)
         {
             if (id is null) return View(new Event());
@@ -21,7 +22,7 @@ namespace SPNR_Web.Controllers
             if (@event is null) return ToHome();
             return View(@event);
         }
-
+        [SessionAuthFilter]
         public IActionResult News(Guid? id)
         {
             if (id is null) return View(new News());
@@ -29,6 +30,7 @@ namespace SPNR_Web.Controllers
             if (news is null) return ToHome();
             return View(@news);
         }
+        [SessionAuthFilter]
         public IActionResult Media(Guid? id)
         {
             if (id is null) return View(new MediaLink());
@@ -36,7 +38,7 @@ namespace SPNR_Web.Controllers
             if (link is null) return ToHome();
             return View(link);
         }
-
+        [SessionAuthFilter]
         [HttpPost]
         public IActionResult Event(Event @event, IFormFile? file)
         {
@@ -65,7 +67,7 @@ namespace SPNR_Web.Controllers
             _unit.Save();
             return ToHome();
         }
-
+        [SessionAuthFilter]
         [HttpPost]
         public IActionResult News(News news, IFormFile? file)
         {
@@ -89,7 +91,7 @@ namespace SPNR_Web.Controllers
             _unit.Save();
             return ToHome();
         }
-
+        [SessionAuthFilter]
         [HttpPost]
         public IActionResult Media(MediaLink link)
         {
@@ -107,7 +109,7 @@ namespace SPNR_Web.Controllers
             _unit.Save();
             return ToHome();
         }
-
+        [SessionAuthFilter]
         public IActionResult EventDelete(Guid id) 
         {
             Event @event = _unit.EventRepo.ReadFirst(e => e.Id == id);
@@ -121,6 +123,7 @@ namespace SPNR_Web.Controllers
             }
             return ToHome();
         }
+        [SessionAuthFilter]
         public IActionResult NewsDelete(Guid id)
         {
             News news = _unit.NewsRepo.ReadFirst(n => n.Id == id);
@@ -134,6 +137,7 @@ namespace SPNR_Web.Controllers
             }
             return ToHome();
         }
+        [SessionAuthFilter]
         public IActionResult MediaDelete(Guid id)
         {
             MediaLink link = _unit.MediaLinkRepo.ReadFirst(l => l.Id == id);

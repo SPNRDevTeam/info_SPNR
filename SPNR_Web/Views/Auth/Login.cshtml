@@ -5,34 +5,63 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Login</h1>
+<style>
+    body {
+        background-color: #f2fafe;
+    }
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Login" class="control-label"></label>
-                <input asp-for="Login" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
+    .card {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow to the card */
+        margin-top: 20px; /* Add spacing at the top of the card */
+    }
+
+    .btn-login {
+        margin-top: 15px; /* Add spacing at the top of the login button */
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+</style>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="text-center" style="color: #4a4a4a">Вход</h1>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Login">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Login" class="control-label" style="color:#4a4a4a">Username:</label>
+                                <input asp-for="Login" class="form-control" />
+                                <span asp-validation-for="Login" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password" class="control-label" style="color:#4a4a4a">Password:</label>
+                                <input asp-for="Password" type="password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-login">Войти</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col text-center">
+                <a asp-controller="Home" asp-action="Index" >Вернуться</a>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-controller="Home" asp-action="Index">Back</a>
-</div>
+</body>
 
 @section Scripts
     {

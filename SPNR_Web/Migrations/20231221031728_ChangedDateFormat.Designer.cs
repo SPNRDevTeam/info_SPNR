@@ -12,8 +12,8 @@ using SPNR_Web.DataAccess;
 namespace SPNR_Web.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20231220050547_RootUser")]
-    partial class RootUser
+    [Migration("20231221031728_ChangedDateFormat")]
+    partial class ChangedDateFormat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,14 +121,6 @@ namespace SPNR_Web.Migrations
                     b.HasIndex("Login");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("647cc151-245c-4364-b93b-34c8976aa019"),
-                            Login = "root_user",
-                            Password = "AQAAAAIAAYagAAAAEGc6P7EULkVfkO5MivnITxyl8gk3BeSTSFv9XqisrvUTPiS5T4RF6lzac71k7OvB6Q=="
-                        });
                 });
 #pragma warning restore 612, 618
         }

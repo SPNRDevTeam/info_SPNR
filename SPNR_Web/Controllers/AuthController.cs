@@ -15,7 +15,7 @@ namespace SPNR_Web.Controllers
         {
             _unit = unitOfWork;
         }
-        public IActionResult Unauthorized()
+        public new IActionResult Unauthorized()
         {
             TempData["error"] = "Авторизуйтесь для доступа к этой функции";
             return RedirectToAction("Login");
@@ -66,6 +66,28 @@ namespace SPNR_Web.Controllers
             _unit.UserRepo.Add(user);
             _unit.Save();
 
+            return ToHome();
+        }
+        [SessionAuthFilter]
+        public IActionResult UserPanel()
+        {
+            List<User> users = 
+                _unit.UserRepo.ReadAll().ToList();
+            return View(users);
+        }
+        [SessionAuthFilter]
+        public IActionResult Delete(Guid id)
+        {
+            User? user = _unit.UserRepo.ReadFirst(u => u.Id == id);
+            if (user is null)
+            {
+                TempData["error"] = "Такого пользователя не существует";
+                return ToHome();
+            }
+
+            _unit.UserRepo.Remove(user);
+            _unit.Save();
+            TempData["succes"] = "Пользователь удален.";
             return ToHome();
         }
 

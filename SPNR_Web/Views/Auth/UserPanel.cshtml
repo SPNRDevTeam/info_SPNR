@@ -21,7 +21,7 @@
             <td>
                 @if (item.Login != "root_user")
                 {
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete</a>
                 }
             </td>
         </tr>

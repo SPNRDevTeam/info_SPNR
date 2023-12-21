@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SPNR_Web.Migrations
 {
     /// <inheritdoc />
-    public partial class RootUser : Migration
+    public partial class ChangedDateFormat : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,21 +34,11 @@ namespace SPNR_Web.Migrations
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Login", "Password" },
-                values: new object[] { new Guid("647cc151-245c-4364-b93b-34c8976aa019"), "root_user", "AQAAAAIAAYagAAAAEGc6P7EULkVfkO5MivnITxyl8gk3BeSTSFv9XqisrvUTPiS5T4RF6lzac71k7OvB6Q==" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Users",
-                keyColumn: "Id",
-                keyValue: new Guid("647cc151-245c-4364-b93b-34c8976aa019"));
-
             migrationBuilder.AlterColumn<DateTime>(
                 name: "PublicationTime",
                 table: "News",

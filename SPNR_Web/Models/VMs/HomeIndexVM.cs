@@ -6,5 +6,7 @@ namespace SPNR_Web.Models.VMs
     {
         public IEnumerable<Event> Events { get; set; }
         public IEnumerable<News> News { get; set; }
+        public IEnumerable<MediaLink> MediaLinks { get; set; }
     }
 }
+ 

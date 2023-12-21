@@ -21,25 +21,22 @@ namespace SPNR_Web.Controllers
         {
             HomeIndexVM VM = new HomeIndexVM();
             VM.Events = _unit.EventRepo.ReadAll();
-            VM.News = _unit.NewsRepo.ReadAll().OrderBy(n => n.PublicationTime);
+            VM.News = _unit.NewsRepo.ReadAll();
+            VM.MediaLinks = _unit.MediaLinkRepo.ReadAll();
             return View(VM);
         }
         public IActionResult Event(Guid id)
         {
             Event? @event = _unit.EventRepo.ReadFirst(u => u.Id == id);
-            if (@event == null) return View(null);
+            if (@event == null) return RedirectToAction("Index");
 
             HomeEventVM VM = new HomeEventVM();
             VM.Event = @event;
-            VM.Header = _unit.HeaderRepo.ReadFirst(h => h.EventId == id);
-            VM.HeaderLinks = _unit.HeaderLinkRepo.ReadWhere(l => l.HeaderId == VM.Header.Id);
-            VM.Blocks = _unit.BlockRepo.ReadWhere(b => b.EventId == id);
-            VM.SubEvents = _unit.SubEventRepo.ReadWhere(s => s.EventId == id);
             return View(VM);
         }
         public IActionResult News()
         {
-            IEnumerable<News> news = _unit.NewsRepo.ReadAll().OrderBy(n => n.PublicationTime);
+            IEnumerable<News> news = _unit.NewsRepo.ReadAll();
             return View(news);
         }
         public IActionResult About() 
@@ -48,7 +45,7 @@ namespace SPNR_Web.Controllers
         }
         public IActionResult Media() 
         {
-            IEnumerable<MediaLink> links = _unit.MediaLinkRepo.ReadAll().OrderBy(l => l.CreationTime);
+            IEnumerable<MediaLink> links = _unit.MediaLinkRepo.ReadAll();
             return View(links);
         }
     }

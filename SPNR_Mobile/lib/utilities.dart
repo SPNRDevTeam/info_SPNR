@@ -6,11 +6,12 @@ import 'package:flutter/foundation.dart';
 
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 
 dynamic displayImage(dynamic item) { // displays image for any item with imgPath property
   if (item.imgPath != 'null') {
     print('displayed an image');
-    return Image.network('http://localhost:5150/media/${item.imgPath.replaceAll('\\', '/').split('/')[2]}', fit: BoxFit.fitHeight,); // displays an image
+    return Image(image: AssetImage('assets/presentation_files/${item.imgPath.split('/')[2]}'), fit: BoxFit.fitHeight,); // displays an image
   } else {
     print('image fetch failure');
     return SizedBox.shrink();
@@ -18,7 +19,7 @@ dynamic displayImage(dynamic item) { // displays image for any item with imgPath
 }
 
 Future<List<dynamic>> fetchData(http.Client client, String itemInApi) async { // fetches json and starts an isolated parsing of the events
-  final response = await http.get(Uri.parse('http://localhost:5150/Api/$itemInApi')); // TODO: тестовый джей сон поменять на нормальный
+  final response = await http.get(Uri.parse('https://my-json-server.typicode.com/Evgen1987RUS/testjson-/$itemInApi')); // TODO: тестовый джей сон поменять на нормальный
   
   switch (itemInApi) {
     case 'Events':

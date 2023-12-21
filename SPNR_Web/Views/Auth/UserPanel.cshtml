@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SPNR_Web.Models.DataBase.User>
 
 <p>
-    <a asp-action="Register">Create New</a>
+    <a asp-action="Register" class="btn btn-primary"><i class="bi bi-plus-circle"></i>Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -21,7 +21,7 @@
             <td>
                 @if (item.Login != "root_user")
                 {
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i>Delete</a>
                 }
             </td>
         </tr>

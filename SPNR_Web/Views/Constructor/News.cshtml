@@ -1,44 +1,50 @@
 ﻿@model SPNR_Web.Models.DataBase.News
 
-<h4>News</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="News" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PublicationTime" class="control-label"></label>
-                <input asp-for="PublicationTime" class="form-control" data="@Model.PublicationTime" />
-                <span asp-validation-for="PublicationTime" class="text-danger"></span>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7 mx-auto">
+            <div class="col-md-8">
+                <h3 class="text-center mt-3 mb-4" style="color: #4a4a4a">Создать мероприятие</h3>
+                <hr />
+
+                <form asp-action="News" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="PublicationTime" class="control-label">Дата публикации</label>
+                        <input asp-for="PublicationTime" class="form-control" data="@Model.PublicationTime" />
+                        <span asp-validation-for="PublicationTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Name" class="control-label">Название</label>
+                        <input asp-for="Name" class="form-control" data="@Model.Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <input asp-for="ImgPath" type="hidden" />
+                        <label for="file" class="control-label">Картинка</label>
+                        <input type="file" name="file" class="form-control" />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Description" class="control-label">Описание</label>
+                        <input asp-for="Description" class="form-control" data="@Model.Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <input type="submit" value="Создать" class="btn btn-primary" />
+                        @{
+                            if (Model.Id != Guid.Empty)
+                            {
+                                <a asp-controller="Constructor" asp-action="NewsDelete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            }
+                        }
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" data="@Model.Name"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input asp-for="ImgPath" type="hidden" />
-                <input type="file" name="file" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" data="@Model.Description"/>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                @{
-                    if (Model.Id != Guid.Empty)
-                    {
-                        <a asp-controller="Constructor" asp-action="NewsDelete" asp-route-id="@Model.Id" class="btn btn-danger"><i class="bi bi-trash"></i>Delete</a>
-                    }
-                }
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

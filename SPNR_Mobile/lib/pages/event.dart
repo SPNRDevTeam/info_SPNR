@@ -1,51 +1,32 @@
 // event.dart is responsible for all event items and their pages
 
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:async';
-import 'dart:convert';
 
+import '../utilities.dart';
 
-Future<List<Event>> fetchEvents(http.Client client) async { // fetches json and starts an isolated parsing of the events
-  final response = await http.get(Uri.parse('http://localhost:5150/Api/Events')); // TODO: тестовый джей сон поменять на нормальный
+class EventPage extends StatefulWidget {
+  const EventPage({super.key});
 
-  return compute(parseEvents, response.body);
+  @override
+  State<EventPage> createState() => _EventPageState();
 }
 
-List<Event> parseEvents(String responseBody) { // decodes the json and casts into a map of strings
-  final parsed = (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>();
+class _EventPageState extends State<EventPage> {
+  _EventPageState({Key? key});
+  Future<List<dynamic>> events = fetchData(http.Client(), 'Events');
 
-  return parsed.map<Event>((json) => Event.fromJson(json)).toList(); // maps the events and then turns them into lists (very complicated stuff, surprised this works)
-}
-
-class Event { // struct of an <Event> type objects
-  final String id;
-  final String name;
-  final String description;
-  final String dateTime;
-  final String text;
-  final String imgPath;
-
-  const Event({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.dateTime,
-    required this.text,
-    required this.imgPath,
-  });
-
-  factory Event.fromJson(Map<String, dynamic> json) { // fetches json's variables and maps them to the <Event> object
-    return Event(                                     // also possible to write with a newer implementation in .dart (pattern matching for json)
-      id: json['id'] as String,                       // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
-      name: json['name'] as String,                   // this is the code + an explanation
-      description: json['description'] as String,
-      dateTime: json['dateTime'] as String,
-      text: json['text'] as String,
-      imgPath: json['imgPath'] as String,
-    );
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        events = fetchData(http.Client(), 'Events');
+        setState((){});
+      },
+      child: EventListBuilder(events: events));
   }
 }
 
@@ -74,7 +55,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               alignment: Alignment.center,
               child: Text(
                 day,
-                style: TextStyle(fontSize: 40, color: Colors.red),
+                style: TextStyle(fontSize: 30, color: Colors.red),
               ),
             ),
             Container(
@@ -82,7 +63,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               alignment: Alignment.center,
               child: Text(
                 month,
-                style: TextStyle(fontSize: 20, color: Colors.red),
+                style: TextStyle(fontSize: 23, color: Colors.red),
               ),
             ),
           ],
@@ -92,7 +73,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
           quarterTurns: 1,
           child: Text(
             '${parsedTime[0]}:${parsedTime[1]}',
-            style: TextStyle(fontSize: 27, color: Colors.red),
+            style: TextStyle(fontSize: 34, color: Colors.red),
           ),
         ),
       ],
@@ -105,7 +86,7 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EventPage(event: event)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EventPageOnPush(event: event)));
       },
       child: Row(
         children: <Widget>[
@@ -116,10 +97,12 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1),
                 SizedBox(
-                  height: 60,
                   width: width * 0.65,
+                  child: Text(event.name, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 2)),
+                SizedBox(
+                  width: width * 0.65,
+                  height: 60,
                   child: Text(event.description, style: TextStyle(color: Colors.white, fontSize:  20), overflow: TextOverflow.ellipsis, maxLines: 2)
                 ),
               ],
@@ -133,26 +116,27 @@ class EventDescription extends StatelessWidget { // the class of the item  in th
 
 class EventsList extends StatelessWidget {
   const EventsList({super.key, required this.events});
-  final List<Event> events;
+  final List<dynamic> events;
 
   @override
   Widget build(BuildContext context) { // creates the list of the events
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: events.length,
-        shrinkWrap: true,
-        itemBuilder: (context, int index) {
-          print('item shown');
-          return Container(
-            child: EventDescription(event: events[index]), // this is the item that goes into the list
-          );
-        });
+      separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.grey, thickness: 2, height: 2),
+      itemCount: events.length,
+      shrinkWrap: true,
+      itemBuilder: (context, int index) {
+        print('item shown');
+        return Container( // even though this is highlighted as unnecessary use: this is very much necessary as the future builder will ignore the description without it being in a container 
+          child: EventDescription(event: events[index]), // this is the item that goes into the list
+        );
+      });
   }
 }
 
 class EventListBuilder extends StatelessWidget {
-  const EventListBuilder({super.key});
+  EventListBuilder({super.key, required this.events});
+  final Future<List<dynamic>> events;
 
   @override
   Widget build(BuildContext context) {
@@ -162,16 +146,15 @@ class EventListBuilder extends StatelessWidget {
           height: 40,
           padding: EdgeInsets.only(left: 15.0),
           color: Color.fromRGBO(33, 37, 41, 1),
-          width: double.infinity,
           child: Text('Ближайшие мероприятия:', style: TextStyle(fontSize: 25 ,color: Colors.white)), // TODO: check if the scaling is off on ALL devices
         ),
         Divider(
-          thickness: 2.0,
-          color: Colors.grey, // TODO: change color
-          height: 0,
+          thickness: 3,
+          height: 3,
+          color: Colors.grey
         ),
-        FutureBuilder<List<Event>>( // builds this widget in the future
-          future: fetchEvents(http.Client()),
+        FutureBuilder<List<dynamic>>( // builds this widget in the future
+          future: events,
           builder: (context, snapshot) { // fetches snapshots
             if (snapshot.hasError) {
               print('snapshot failure');
@@ -181,30 +164,23 @@ class EventListBuilder extends StatelessWidget {
             } else if (snapshot.hasData) {
               return EventsList(events: snapshot.data!); // calls the class to create a list of all of the events
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Padding(
+                padding: EdgeInsets.only(top: 15.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             }
           },
         ),
-        // FIXME: this is where the calendar is supposed to go
       ],
     );
   }
 }
 
-class EventPage extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
-  const EventPage({super.key, required this.event});
+class EventPageOnPush extends StatelessWidget { // this is the widget class for the page that displays the event image, description, name, time etc.
+  const EventPageOnPush({super.key, required this.event});
   final Event event;
-
-  dynamic displayImage(String imgPath) {
-    if (imgPath.isNotEmpty) {
-      print('displayed an image');
-      return Image.network('http://localhost:5150/media/${event.imgPath.replaceAll('\\', '/').split('/')[2]}', fit: BoxFit.fitHeight,); // displays an image
-    } else {
-      print('image fetch failure');
-    }
-  }
 
   Column printTimeOfEvent(Event event) {
     final yearMonthDay = event.dateTime.split('-');
@@ -236,12 +212,15 @@ class EventPage extends StatelessWidget { // this is the widget class for the pa
       ),
       body: ListView(
         children: [
-            displayImage(event.imgPath), // TODO: check with real urls to see if this works // TODO: add automatic resize
+            displayImage(event), // TODO: check with real urls to see if this works // TODO: add automatic resize
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: printTimeOfEvent(event),
             ),
             Divider( // TODO: change properties
+              color: Colors.grey,
+              thickness: 3,
+              height: 3,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0),

@@ -1,46 +1,125 @@
 // news.dart is responsible for the news page
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
+import 'package:readmore/readmore.dart';
 
-Future<List<NewsArticle>> fetchNews(http.Client client) async {
-  final response = await http.get(Uri.parse('https://my-json-server.typicode.com/Evgen1987RUS/test-json/events/'));
+import '../utilities.dart';
 
-  return compute(parseNews, response.body);
+class NewsPage extends StatefulWidget {
+  const NewsPage({Key? key});
+
+  @override
+  State<NewsPage> createState() => _NewsPageState();
 }
 
-List<NewsArticle> parseNews(String responseBody) {
-  final parsed = (jsonDecode(responseBody) as List).cast<Map<String, dynamic>>(); // decodes the json and casts into a map of strings
+class _NewsPageState extends State<NewsPage> {
+  _NewsPageState({Key? key});
+  Future<List<dynamic>> news = fetchData(http.Client(), 'News');
 
-  return parsed.map<NewsArticle>((json) => NewsArticle.fromJson(json)).toList();
-}
-
-class NewsArticle {
-  final String id;
-  final String name;
-  final String description;
-  final String date;
-  final String imgPath;
-
-  const NewsArticle({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.date,
-    required this.imgPath,
-  });
-// TODO: change to whatever data I am pulling from the JSON
-  factory NewsArticle.fromJson(Map<String, dynamic> json) { // fetches json's variables and maps them to the <Event> object
-    return NewsArticle(                                     // also possible to write with a newer implementation in .dart (pattern matching for json)
-      id: json['id'] as String,                       // https://stackoverflow.com/questions/77554946/could-someone-explain-how-this-code-struct-in-dart-and-fetching-values-from-jso
-      name: json['name'] as String,                   // this is the code + an explanation
-      description: json['description'] as String,
-      date: json['date'] as String,
-      imgPath: json['imgPath'] as String,
+  @override
+  build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        news = fetchData(http.Client(), 'News');
+        setState((){});
+      },
+      child: NewsList(news: news),
     );
   }
 }
 
+class NewsListBuilder extends StatelessWidget {
+  const NewsListBuilder({super.key, required this.news});
+  final List<dynamic> news;
 
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
+      separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 7, height: 7, color: Colors.grey),
+      itemCount: news.length,
+      shrinkWrap: true,
+      itemBuilder: (context, int index) {
+        print('article shown');
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            displayImage(news[index]),
+            Divider(
+              thickness: 3,
+              height: 3,
+              color: Colors.grey
+            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(left: 15.0),
+                color: Color.fromRGBO(33, 37, 41, 1),
+                child: Text(news[index].name, style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold))
+              ),
+            ),
+            Divider(
+              thickness: 3,
+              height: 3,
+              color: Colors.grey
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 15.0),
+              child: ReadMoreText(
+                '${news[index].description} ',
+                trimCollapsedText: 'Развернуть', 
+                trimExpandedText: 'Свернуть', 
+                style: TextStyle(fontSize: 20, color: Colors.white), 
+                moreStyle: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.bold),
+                colorClickableText: Colors.grey,
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+}
+
+class NewsList extends StatelessWidget { // shows news on the page
+  const NewsList({super.key, required this.news});
+  final Future<List<dynamic>> news;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Container(
+          height: 40,
+          padding: EdgeInsets.only(left: 15.0),
+          color: Color.fromRGBO(33, 37, 41, 1),
+          child: Text('Новости:', style: TextStyle(fontSize: 25 ,color: Colors.white)), 
+        ),
+        Divider(
+          thickness: 3,
+          height: 3, 
+          color: Colors.grey,
+        ),
+        FutureBuilder(
+          future: fetchData(http.Client(), 'News'),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Ошибка', style: TextStyle(fontSize: 25, color: Colors.white)),
+              ); 
+            } else if (snapshot.hasData) {
+              return NewsListBuilder(news: snapshot.data!);
+            } else {
+              return Padding(
+                padding: EdgeInsets.only(top: 15.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+}

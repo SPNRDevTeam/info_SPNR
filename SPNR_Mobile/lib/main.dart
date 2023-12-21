@@ -1,13 +1,13 @@
 // this is the main file that is responsible for the home page of the mobile app
 // as well as fetching all of the events from the json provided
 
-// FIXME: IMPORTANT! add automatic sizing for apps 
-
-import 'pages/event.dart' as event;
-// import 'pages/calendar.dart' as calendar;
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'pages/event.dart' as event;
+import 'pages/news.dart' as news;
+import 'pages/contacts.dart' as contacts;
+
 
 void main() => runApp(const SPNRApp()); // main method which starts this app
 
@@ -34,9 +34,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {     // App class
   _MainPageState({Key? key});
   int _currentPage = 0;
+  
   static List<Widget> _pages = [
-    event.EventListBuilder(),
-    
+    event.EventPage(),
+    news.NewsPage(),
+    contacts.ContactPage(),
   ];
 
   @override
@@ -67,16 +69,22 @@ class _MainPageState extends State<MainPage> {     // App class
             icon: Icon(Icons.home_outlined),
             label: 'Главная',
           ),
-          /* // event calendar: didn't meet deadlines which is why this is commented
+          /* 
+          // event calendar: future addition in case of working on this porject later
+          // will show a table calendar with all of the events marked.
           BottomNavigationBarItem( // calendar
             icon: Icon(Icons.calendar_month),
             label: 'Календарь', 
           ),
           */
+          /* 
+          // favorites: future addition in case of working on this porject later
+          // will allow a person to favorite events and get push notifications only for them.
           BottomNavigationBarItem( // favorited events
             icon: Icon(Icons.favorite),
             label: 'Избранное',
           ),
+          */
           BottomNavigationBarItem( // news
             icon: Icon(Icons.newspaper),
             label: 'Новости',

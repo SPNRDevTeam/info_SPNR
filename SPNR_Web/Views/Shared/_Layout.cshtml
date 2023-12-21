@@ -46,7 +46,7 @@
                                 <a class="nav-link text-white" asp-controller="auth" asp-action="logout">Выйти</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="auth" asp-action="register">Зарегистрироваться</a>
+                                <a class="nav-link text-white" asp-controller="auth" asp-action="UserPanel">Пользователи</a>
                             </li>
                         }
                         else
@@ -66,9 +66,11 @@
     </main>
 
     <footer class="footer text-center py-3" style="background-color:#0067b1; line-height:10px; color: white;position:absolute;bottom: 0">
-        <p>Адрес: Кампус ДВФУ, о. Русский, Владивосток, Россиия</p>
-        <p>Контакты: example@example.com</p>
-        <p>Телефон: +7 123 456 789</p>
+        <div style="display: none">
+            <p>Адрес: Кампус ДВФУ, о. Русский, Владивосток, Россиия</p>
+            <p>Контакты: example@example.com</p>
+            <p>Телефон: +7 123 456 789</p>
+        </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

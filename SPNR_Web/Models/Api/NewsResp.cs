@@ -1,0 +1,12 @@
+namespace SPNR_Web.Models.Api
+{
+    public class NewsResp
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string DateTime { get; set; }
+        //public string Text { get; set; }
+        public string ImgPath { get; set; }
+    }
+}

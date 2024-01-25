@@ -1,6 +1,47 @@
-﻿@model IEnumerable<MediaLink>
+﻿@model IEnumerable<SPNR_Web.Models.DataBase.MediaLink>
 @{
     ViewData["Title"] = "Media";
 }
 
-<h1>Media</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 style="color: #4a4a4a">Медиа</h2>
+        </div>
+        @if (Context.Session.GetString("Login") is not null)
+        {
+            <div class="col-md-6 text-end">
+                <a asp-controller="constructor" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Добавить</a>
+            </div>
+        }
+    </div>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>URL</th>
+                @if (Context.Session.GetString("Login") is not null)
+                {
+                    <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td><a href="@item.Url" target="_blank">@Html.DisplayFor(modelItem => item.Url)</a></td>
+                    @if (Context.Session.GetString("Login") is not null)
+                    {
+                        <td>
+                            <a asp-controller="constructor" asp-action="media" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil"></i> Изменить</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

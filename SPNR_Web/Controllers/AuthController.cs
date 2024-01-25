@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SPNR_Web.DataAccess;
 using SPNR_Web.Models.DataBase;
+using SPNR_Web.Utils;
 
 namespace SPNR_Web.Controllers
 {
@@ -14,28 +15,31 @@ namespace SPNR_Web.Controllers
         {
             _unit = unitOfWork;
         }
-
+        public new IActionResult Unauthorized()
+        {
+            TempData["error"] = "Авторизуйтесь для доступа к этой функции";
+            return RedirectToAction("Login");
+        }
         public IActionResult Login()
         {
             return View();
         }
-
+        [SessionAuthFilter]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return ToHome();
         }
-
+        [SessionAuthFilter]
         public IActionResult Register()
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Login(User user)
         {
             User dbUser = _unit.UserRepo.ReadFirst(u => u.Login == user.Login);
-            if (dbUser == null)
+            if (dbUser is null)
             {
                 ModelState.AddModelError("", "Login not registered");
             }
@@ -48,7 +52,7 @@ namespace SPNR_Web.Controllers
             HttpContext.Session.SetString("Login", user.Login);
             return ToHome();
         }
-
+        [SessionAuthFilter]
         [HttpPost]
         public IActionResult Register(User user)
         {
@@ -64,7 +68,30 @@ namespace SPNR_Web.Controllers
 
             return ToHome();
         }
+        [SessionAuthFilter]
+        public IActionResult UserPanel()
+        {
+            List<User> users = 
+                _unit.UserRepo.ReadAll().ToList();
+            return View(users);
+        }
+        [SessionAuthFilter]
+        public IActionResult Delete(Guid id)
+        {
+            User? user = _unit.UserRepo.ReadFirst(u => u.Id == id);
+            if (user is null)
+            {
+                TempData["error"] = "Такого пользователя не существует";
+                return ToHome();
+            }
 
+            _unit.UserRepo.Remove(user);
+            _unit.Save();
+            TempData["succes"] = "Пользователь удален.";
+            return ToHome();
+        }
+
+        [NonAction]
         IActionResult ToHome()
         {
             return RedirectToRoute(new RouteValueDictionary()

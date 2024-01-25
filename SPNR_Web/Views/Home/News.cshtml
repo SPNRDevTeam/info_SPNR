@@ -4,4 +4,61 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>News</h1>
+<style>
+    .news-container {
+        margin-left: 75px;
+    }
+
+    .news {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        position: relative; /* Добавляем position: relative для позиционирования линии */
+    }
+
+        .news img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+    .news-date {
+        background-color: #0069b1;
+        color: white;
+        display: inline-block;
+        border-radius: 2px;
+        margin-bottom: 0;
+        font-size: 16px;
+        padding: 3px 5px;
+    }
+
+    .news-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #ddd;
+    }
+
+</style>
+
+<h2 style="margin-left: 75px">Latest News</h2>
+
+@foreach (var news in Model)
+{
+    <div class="col-md-7 news-container">
+        <div class="news">
+            @if (!string.IsNullOrEmpty(news.ImgPath))
+            {
+                <img src="@news.ImgPath" alt="News Image" />
+            }
+            <h3>@news.Name</h3>
+            <p class="news-date">@news.PublicationTime.ToShortDateString()</p>
+            <p>@news.Description</p>
+            <div class="news-line"></div> <!-- Добавляем линию между новостями -->
+        </div>
+    </div>
+}
+
+

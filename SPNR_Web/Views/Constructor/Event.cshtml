@@ -1,0 +1,70 @@
+﻿@model SPNR_Web.Models.DataBase.Event
+
+@{
+    ViewData["Title"] = "Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h3 class="text-center mt-3 mb-4" style="color: #4a4a4a">Создать мероприятие</h3>
+            <hr />
+
+            <form method="post" class="row g-3" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Название мероприятия</label>
+                        <input asp-for="Name" class="form-control" id="Name" data="@Model.Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Описание</label>
+                        <input asp-for="Description" class="form-control" id="Description" data="@Model.Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="DateTime" class="form-label">Дата и время</label>
+                        <input asp-for="DateTime" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" id="DateTime" />
+                        <span asp-validation-for="DateTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <input asp-for="ImgPath" type="hidden" />
+                        <label for="file" class="form-label">Картинка</label>
+                        <input type="file" name="file" class="form-control" id="file" data="@Model.ImgPath" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="Text" class="form-label">Текст</label>
+                        <textarea asp-for="Text" class="form-control" id="Text"></textarea>
+                        <span asp-validation-for="Text" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <input type="submit" value="Создать" class="btn btn-primary" />
+                        @{
+                            if (Model.Id != Guid.Empty)
+                            {
+                                <a asp-controller="Constructor" asp-action="EventDelete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+    {
+    <partial name="_TinyMCEPartial" />
+    <partial name="_ValidationScriptsPartial" />
+}

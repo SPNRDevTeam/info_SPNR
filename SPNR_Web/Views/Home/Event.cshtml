@@ -1,7 +1,49 @@
-﻿@model HomeEventVM 
-<!--Если модель null значит ивента нет, вывести сообщение об ошибке-->
+﻿@model HomeEventVM
+<!-- Если модель null значит, ивента нет, вывести сообщение об ошибке -->
 @{
     ViewData["Title"] = "Event";
 }
 
-<h1>Event</h1>
+<style>
+    .hevent-date {
+        background-color: #0069b1;
+        color: white;
+        display: inline-block;
+        border-radius: 2px;
+        margin-bottom: 0;
+        font-size: 1.2em; /* Установите одинаковый размер шрифта для .hevent-date и <p> внутри него */
+        padding: 3px 5px;
+        font-size: 1.2em;
+    }
+</style>
+
+<div class="container mt-4">
+    @if (Model.Event == null)
+    {
+        <div class="alert alert-danger" role="alert" style="font-size: 1.2em;">
+            Event not found.
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-6 col-md-8 mx-auto text-center">
+            <!-- Добавленные классы для ограничения ширины -->
+            <div class="hevent-name mb-3">
+                <h1 style="font-size: 2em;">@Model.Event.Name</h1>
+            </div>
+            <div class="hevent-img mb-3">
+                <img src="@Model.Event.ImgPath" alt="Event Image" class="img-fluid" />
+            </div>
+            <div class="hevent-desc mb-3" style="font-size: 1.5em;">
+                <h1>Описание</h1>
+                <p>@Model.Event.Description</p>
+            </div>
+            <p  class="hevent-date"> @Model.Event.DateTime.ToShortDateString()</p>
+            
+            <div class="hevent-text mb-3">
+                <h3>О мероприятии</h3>
+                @Model.Event.Text
+            </div>
+        </div>
+    }
+

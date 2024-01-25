@@ -478,3 +478,4 @@ $RECYCLE.BIN/
 
 # Web
 /SPNR_Web/appsettings.json
+/SPNR_Web/wwwroot/media/*
